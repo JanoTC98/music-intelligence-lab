@@ -30,6 +30,38 @@ required_columns:
   - "time_signature"
   - "track_genre"
 
+cleaning:
+  drop_columns:
+    - "Unnamed: 0"
+  identity_required:
+    - "track_id"
+    - "artists"
+    - "track_name"
+  short_track_threshold_ms: 60000
+  long_track_threshold_ms: 600000
+  preserve_popularity_zero: true
+  preserve_duration_outliers: true
+
+identity:
+  text_unicode_normalization: "NFKC"
+  casefold: true
+  trim: true
+  collapse_whitespace: true
+  remove_punctuation_exact_grouping: false
+  sort_artists_exact_grouping: false
+  fingerprint_hash: "sha256"
+  expected_exact_recording_groups: 83881
+
+incomplete_audio:
+  required_zero_pattern:
+    tempo: 0
+    danceability: 0
+    speechiness: 0
+    valence: 0
+    time_signature: 0
+  exclude_from_recommenders: true
+  classifier_baseline_strategy: "exclude"
+
 validation_ranges:
   popularity:
     min: 0
