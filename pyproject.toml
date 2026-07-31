@@ -1,0 +1,99 @@
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "spotify-music-intelligence"
+version = "0.1.0"
+description = "Content-based music recommendation and genre classification project"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+authors = [
+  { name = "Alejandro José Tineo Carranza" }
+]
+dependencies = [
+  "pandas>=2.2,<3",
+  "numpy>=2,<3",
+  "pyarrow>=17,<25",
+  "scipy>=1.13,<2",
+  "scikit-learn>=1.6,<2",
+  "joblib>=1.4,<2",
+  "pyyaml>=6,<7",
+  "rapidfuzz>=3.9,<4",
+  "streamlit>=1.45,<2",
+  "plotly>=5.24,<7",
+  "matplotlib>=3.9,<4",
+  "sqlalchemy>=2.0,<3",
+  "pymysql>=1.1,<2",
+  "cryptography>=43,<47",
+  "python-dotenv>=1.0,<2",
+  "pandas-stubs~=2.3.3",
+]
+
+[project.optional-dependencies]
+ml-advanced = [
+  "xgboost>=2.1,<4"
+]
+
+[dependency-groups]
+dev = [
+  "pytest>=8,<10",
+  "pytest-cov>=5,<8",
+  "ruff>=0.9,<1",
+  "mypy>=1.13,<2",
+  "jupyter>=1,<2",
+  "ipykernel>=6,<8",
+  "pre-commit>=4,<5"
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+extend-exclude = [
+  ".venv",
+  "data/raw",
+  "data/interim",
+  "data/processed",
+  "models"
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM", "C4"]
+ignore = ["E501"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+addopts = "-ra --strict-config --strict-markers"
+testpaths = ["tests"]
+pythonpath = ["src"]
+markers = [
+  "integration: tests that use multiple modules or external services",
+  "slow: long-running tests or model training checks"
+]
+
+[tool.coverage.run]
+source = ["spotify_intelligence"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+fail_under = 75
+
+[tool.mypy]
+python_version = "3.12"
+packages = ["spotify_intelligence"]
+warn_unused_configs = true
+warn_return_any = true
+warn_unused_ignores = true
+no_implicit_optional = true
+check_untyped_defs = true
+ignore_missing_imports = true

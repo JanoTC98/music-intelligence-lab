@@ -1,0 +1,71 @@
+version: "1.0"
+random_state: 42
+
+paths:
+  raw_dataset: "data/raw/dataset.csv"
+  quarantine_dir: "data/quarantine"
+  interim_dir: "data/interim"
+  processed_dir: "data/processed"
+
+required_columns:
+  - "Unnamed: 0"
+  - "track_id"
+  - "artists"
+  - "album_name"
+  - "track_name"
+  - "popularity"
+  - "duration_ms"
+  - "explicit"
+  - "danceability"
+  - "energy"
+  - "key"
+  - "loudness"
+  - "mode"
+  - "speechiness"
+  - "acousticness"
+  - "instrumentalness"
+  - "liveness"
+  - "valence"
+  - "tempo"
+  - "time_signature"
+  - "track_genre"
+
+validation_ranges:
+  popularity:
+    min: 0
+    max: 100
+  duration_ms:
+    min: 1
+  danceability:
+    min: 0
+    max: 1
+  energy:
+    min: 0
+    max: 1
+  key:
+    min: -1
+    max: 11
+  loudness:
+    report_extremes: true
+  mode:
+    allowed_values: [0, 1]
+  speechiness:
+    min: 0
+    max: 1
+  acousticness:
+    min: 0
+    max: 1
+  instrumentalness:
+    min: 0
+    max: 1
+  liveness:
+    min: 0
+    max: 1
+  valence:
+    min: 0
+    max: 1
+  tempo:
+    min: 0
+  time_signature:
+    min: 0
+    max: 5
