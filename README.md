@@ -11,20 +11,10 @@ Proyecto end-to-end de ciencia de datos y machine learning que transforma un cat
 7. Un sistema opcional de eventos y feedback almacenado en MySQL.
 8. Un repositorio profesional con pruebas, documentación, CI y despliegue.
 
-## Estado actual
+## Funcionalidad implementada
 
-| Módulo | Estado |
-|---|---|
-| 0 — Inicialización y entorno | Completado |
-| 1 — Ingesta, auditoría y validación | Completado |
-| 2 — Limpieza, catálogo e identidad | Pendiente |
-| 3 — Análisis exploratorio | Pendiente |
-| 4 — Recomendador por canción | Pendiente |
-| 5 — Recomendador por preferencias | Pendiente |
-| 6 — Clasificador multietiqueta | Pendiente |
-| 7 — Clasificador multiclase | Pendiente |
-| 8 — Aplicación Streamlit | Pendiente |
-| 9 — Persistencia MySQL | Pendiente |
+- Auditoría reproducible del catálogo: validación de columnas, rangos y anomalías del dataset.
+- Reporte de calidad en JSON con hash del archivo bruto.
 
 ## Requisitos
 
@@ -52,7 +42,3 @@ uv run pytest
 - `data/` — dataset bruto, cuarentena, intermedios y procesados.
 - `tests/` — pruebas unitarias e integración.
 - `notebooks/` — exploración y experimentos.
-
-## Documentación
-
-La especificación normativa completa está en `AGENTS.md`.
