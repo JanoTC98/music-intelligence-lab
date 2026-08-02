@@ -1,0 +1,81 @@
+{
+  "dataset_hash": "b202fa49909b2d5cef71a04b1d21243cfeb36414535f2ca9272aa646721177bd",
+  "pipeline_version": "1.0",
+  "generated_at_utc": "2026-08-02T13:44:31.197163+00:00",
+  "raw_rows": 114000,
+  "raw_columns": 21,
+  "columns_present": [
+    "Unnamed: 0",
+    "track_id",
+    "artists",
+    "album_name",
+    "track_name",
+    "popularity",
+    "duration_ms",
+    "explicit",
+    "danceability",
+    "energy",
+    "key",
+    "loudness",
+    "mode",
+    "speechiness",
+    "acousticness",
+    "instrumentalness",
+    "liveness",
+    "valence",
+    "tempo",
+    "time_signature",
+    "track_genre"
+  ],
+  "required_columns_ok": true,
+  "nulls": {
+    "total_cells": 3,
+    "columns_with_nulls": {
+      "artists": 1,
+      "album_name": 1,
+      "track_name": 1
+    }
+  },
+  "duplicates": {
+    "total_duplicate_rows": 0,
+    "track_id_duplicates": 24259
+  },
+  "genres": {
+    "total_unique": 114,
+    "expected_unique": 114,
+    "rows_per_genre_expected": 1000,
+    "genre_counts_all_equal": true
+  },
+  "duration": {
+    "short_tracks_under_60s": 851,
+    "long_tracks_over_10min": 603
+  },
+  "popularity": {
+    "zero_count": 16020
+  },
+  "tempo_zero_count": 157,
+  "incomplete_audio": {
+    "count": 157,
+    "pattern_used": [
+      "tempo=0",
+      "danceability=0",
+      "speechiness=0",
+      "valence=0",
+      "time_signature=0"
+    ]
+  },
+  "range_violations": {
+    "duration_ms": [
+      {
+        "row": 65900,
+        "value": 0
+      }
+    ]
+  },
+  "track_ids_unique": 89741,
+  "rows_minus_unique_ids": 24259,
+  "multi_genre": {
+    "tracks_with_multiple_genres": 16299,
+    "max_genres_per_track": 9
+  }
+}

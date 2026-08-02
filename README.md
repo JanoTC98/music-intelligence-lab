@@ -13,8 +13,27 @@ Proyecto end-to-end de ciencia de datos y machine learning que transforma un cat
 
 ## Funcionalidad implementada
 
-- Auditoría reproducible del catálogo: validación de columnas, rangos y anomalías del dataset.
-- Reporte de calidad en JSON con hash del archivo bruto.
+### Módulo 1 · Ingesta, auditoría y validación
+- Auditoría reproducible del catálogo: validación de columnas, tipos, rangos y anomalías del dataset.
+- Reporte de calidad en `reports/data_quality/data_quality_report.json` con hash SHA-256 del archivo bruto.
+- Notebook `notebooks/01_data_audit.ipynb`.
+
+### Módulo 2 · Limpieza, catálogo e identidad
+- Pipeline reproducible `scripts/prepare_data.py` con manifiesto en `data/processed/prepare_data_manifest.json`.
+- Cuarentena de identidad inválida en `data/quarantine/`.
+- Catálogo consolidado por `track_id` (`tracks.parquet`) con popularidad min/max/mediana.
+- Tablas puente de géneros, artistas y grabaciones (`track_genres`, `track_artists`, `recording_tracks`, `recording_genres`, `genre_catalog`).
+- `recording_group_id` exacto (huella normalizada + SHA-256) con 83.881 grupos verificados.
+- Catálogo canónico por grabación (`recordings.parquet`) con track representativo.
+- Reporte de candidatos a casi duplicados sin fusión automática (`reports/identity/near_duplicate_candidates.csv`).
+- Notebook `notebooks/02_identity_analysis.ipynb`.
+
+### Módulo 3 · Análisis exploratorio
+- Distribuciones, anomalías y duraciones extremas.
+- Correlaciones y redundancia de características.
+- Solapamiento y co-ocurrencia de géneros.
+- Figuras exportadas a `reports/figures/`.
+- Notebook `notebooks/03_exploratory_analysis.ipynb`.
 
 ## Requisitos
 
