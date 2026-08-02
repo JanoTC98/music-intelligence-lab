@@ -1,0 +1,72 @@
+version: "recommender-features-v1"
+
+track_recommender:
+  features:
+    - "danceability"
+    - "energy"
+    - "loudness"
+    - "speechiness"
+    - "acousticness"
+    - "instrumentalness"
+    - "liveness"
+    - "valence"
+    - "tempo"
+  baseline:
+    scaler: "standard"
+    metric: "cosine"
+    algorithm: "brute"
+  experiments:
+    - scaler: "standard"
+      metric: "cosine"
+    - scaler: "robust"
+      metric: "cosine"
+    - scaler: "standard"
+      metric: "euclidean"
+    - scaler: "robust"
+      metric: "euclidean"
+  retrieval:
+    default_top_n: 10
+    min_top_n: 5
+    max_top_n: 20
+    initial_candidate_floor: 100
+    candidate_multiplier: 10
+    expansion_steps: [500, 2000]
+  exclusions:
+    audio_analysis_incomplete: true
+    same_recording_group: true
+  filters:
+    explicit_default: "all"
+    genre_default: "all"
+    duration_enabled_default: false
+    duration_suggested_min_seconds: 60
+    duration_suggested_max_seconds: 600
+    different_artist_default: false
+    popularity_min_enabled_default: false
+
+preference_recommender:
+  basic_features:
+    - "energy"
+    - "danceability"
+    - "valence"
+    - "acousticness"
+    - "instrumentalness"
+    - "tempo"
+  advanced_features:
+    - "speechiness"
+    - "liveness"
+    - "loudness"
+    - "duration_ms"
+    - "key"
+    - "mode"
+    - "time_signature"
+  weight_min: 0
+  weight_max: 3
+  reject_all_zero_weights: true
+  distance: "weighted_euclidean"
+  out_of_distribution:
+    warning_percentile: 95
+    weak_match_percentile: 99
+  diversity:
+    enabled_default: false
+    method: "mmr"
+    lambda_default: 0.85

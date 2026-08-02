@@ -1,0 +1,2 @@
+top_n,queries,total_results,self_recommendations,duplicate_groups,filter_violations,filter_compliance_pct,mean_similarity,catalog_coverage_pct,unique_artists_per_list_mean,internal_diversity_similarity_std,latency_ms_p50,latency_ms_p95,stability_perturbation_std,stability_p50_jaccard
+10,200,2000,0,0,0,100.0,0.9728902693432667,2.349,0.9445,0.005939899106747197,22.2010500729084,48.287870036438086,0.01,0.919302947052947

@@ -1,0 +1,17 @@
+{
+  "top_n": 10,
+  "queries": 200,
+  "total_results": 2000,
+  "self_recommendations": 0,
+  "duplicate_groups": 0,
+  "filter_violations": 0,
+  "filter_compliance_pct": 100.0,
+  "mean_similarity": 0.9728902693432667,
+  "catalog_coverage_pct": 2.349,
+  "unique_artists_per_list_mean": 0.9445,
+  "internal_diversity_similarity_std": 0.005939899106747197,
+  "latency_ms_p50": 22.2010500729084,
+  "latency_ms_p95": 48.287870036438086,
+  "stability_perturbation_std": 0.01,
+  "stability_p50_jaccard": 0.919302947052947
+}

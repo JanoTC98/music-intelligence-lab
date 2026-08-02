@@ -1,0 +1,39 @@
+{
+  "version": "v1",
+  "pipeline": "track_recommender",
+  "features": [
+    "danceability",
+    "energy",
+    "loudness",
+    "speechiness",
+    "acousticness",
+    "instrumentalness",
+    "liveness",
+    "valence",
+    "tempo"
+  ],
+  "scaler": "standard",
+  "metric": "cosine",
+  "algorithm": "brute",
+  "retrieval": {
+    "default_top_n": 10,
+    "min_top_n": 5,
+    "max_top_n": 20,
+    "initial_candidate_floor": 100,
+    "candidate_multiplier": 10,
+    "expansion_steps": [
+      500,
+      2000
+    ]
+  },
+  "exclusions": {
+    "audio_analysis_incomplete": true,
+    "same_recording_group": true
+  },
+  "catalog_size": 83736,
+  "dataset_sha256": "b202fa49909b2d5cef71a04b1d21243cfeb36414535f2ca9272aa646721177bd",
+  "config_sha256": "1b68a0b7805b28133f7a4d2306edfe3c6994ff8c23e7049d6a0aa6f96013a506",
+  "git_commit": "47b1806830b322f9103fbd1f9916e51b4f7a4562",
+  "generated_at_utc": "2026-08-02T14:10:54.767734+00:00",
+  "artifact_dir": "models\\recommender\\v1"
+}

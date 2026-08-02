@@ -35,6 +35,16 @@ Proyecto end-to-end de ciencia de datos y machine learning que transforma un cat
 - Figuras exportadas a `reports/figures/`.
 - Notebook `notebooks/03_exploratory_analysis.ipynb`.
 
+### Módulo 4 · Recomendador por canción
+- Servicio no supervisado basado en `recording_group_id` con features acústicas (R1 aprobado: StandardScaler + coseno + brute).
+- Artefactos versionados en `models/recommender/v1/` (`scaler.joblib`, `neighbors.joblib`, `catalog_matrix.npy`, `catalog_index.parquet`, `manifest.json`).
+- Flujo online con recuperación progresiva, exclusión de la propia grabación, deduplicación de grupos y orden estable.
+- Filtros desactivados por defecto (explícito, género, duración, artista, popularidad mínima).
+- Explicaciones por característica y diferencia de tempo en BPM.
+- Evaluación offline (§14.11) en `reports/metrics/track_recommender_evaluation.json/.csv` (muestra de 200 semillas: 0 autorrecomendaciones, 0 duplicados, 100 % cumplimiento de filtros).
+- Comparación R1–R4 en `reports/experiments/track_recommender_r1_r4_comparison.json`.
+- Notebook `notebooks/04_track_recommender_experiments.ipynb`.
+
 ## Requisitos
 
 - Python 3.12.x
