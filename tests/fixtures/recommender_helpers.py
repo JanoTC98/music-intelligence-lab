@@ -40,12 +40,17 @@ def make_catalog_index(n: int = 8) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-def build_tiny_recommender(artifact_dir: str | Path) -> Path:
-    """Create a minimal versioned artifact set and return its directory."""
+def build_tiny_recommender(artifact_dir: str | Path, catalog: pd.DataFrame | None = None) -> Path:
+    """Create a minimal versioned artifact set and return its directory.
+
+    ``catalog`` defaults to ``make_catalog_index(n=8)``; callers can pass a
+    custom catalog to exercise specific cases such as near-duplicate works.
+    """
     out = Path(artifact_dir)
     out.mkdir(parents=True, exist_ok=True)
 
-    catalog = make_catalog_index(n=8)
+    if catalog is None:
+        catalog = make_catalog_index(n=8)
     eligible = catalog[~catalog["audio_analysis_incomplete"]].reset_index(drop=True)
     matrix = eligible[FEATURES].to_numpy(dtype=float)
     scaled = (matrix - matrix.mean(axis=0)) / matrix.std(axis=0)
@@ -83,6 +88,24 @@ def build_tiny_recommender(artifact_dir: str | Path) -> Path:
     with open(out / "manifest.json", "w", encoding="utf-8") as f:
         json.dump(manifest, f, indent=2)
     return out
+
+
+def make_same_work_catalog() -> pd.DataFrame:
+    """Catalog where ``g00b`` is a near-duplicate release of ``g00``.
+
+    Both share ``track_name`` and ``artists`` but keep a different
+    ``recording_group_id`` (the conservative exact grouping, §3.3). The audio
+    features are perturbed slightly so the duplicate is acoustically the closest
+    neighbor of the original.
+    """
+    catalog = make_catalog_index(n=8)
+    duplicate = catalog.iloc[[0]].copy()
+    duplicate["recording_group_id"] = "g00b"
+    duplicate["representative_track_id"] = "t00b"
+    duplicate["album_name"] = "Album 0 (Reissue)"
+    for feature in FEATURES:
+        duplicate[feature] = duplicate[feature].astype(float) + 1e-4
+    return pd.concat([catalog, duplicate], ignore_index=True)
 
 
 def build_tiny_preference_recommender(artifact_dir: str | Path) -> Path:

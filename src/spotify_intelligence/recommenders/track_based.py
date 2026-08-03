@@ -219,6 +219,19 @@ class TrackRecommender:
             seed_artists = self.catalog_index.iloc[seed_row]["artists"]
             df = df[df["artists"] != seed_artists]
 
+        # §14.6: exclude other recordings of the seed's own work. The exact
+        # recording group is already excluded via ``seed_row``, but a
+        # near-duplicate release of the same song (same name and artist set,
+        # different ``recording_group_id``, §3.4) would otherwise surface as the
+        # top candidate.
+        seed_name = str(self.catalog_index.iloc[seed_row].get("track_name", "")).strip().casefold()
+        seed_artists = str(self.catalog_index.iloc[seed_row].get("artists", "")).strip().casefold()
+        if seed_name:
+            same_work = df["track_name"].astype(str).str.strip().str.casefold().eq(seed_name) & df[
+                "artists"
+            ].astype(str).str.strip().str.casefold().eq(seed_artists)
+            df = df[~same_work]
+
         if len(df) == 0:
             return [], []
         return df.index.tolist(), df["_dist"].tolist()

@@ -1,0 +1,17 @@
+version: "app-config-v1"
+app:
+  title: "Spotify Music Intelligence"
+  page_icon: "🎵"
+  layout: "wide"
+  default_top_n: 10
+  min_top_n: 5
+  max_top_n: 20
+
+tracking:
+  enabled_default: false
+  fail_open: true
+  collect_personal_data: false
+
+artifacts:
+  strict_version_check: true
+  train_on_missing: false

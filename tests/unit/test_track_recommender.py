@@ -5,7 +5,10 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "fixtures"))
 
-from recommender_helpers import build_tiny_recommender  # noqa: E402
+from recommender_helpers import (  # noqa: E402
+    build_tiny_recommender,
+    make_same_work_catalog,
+)
 
 from spotify_intelligence.recommenders.errors import ArtifactNotFoundError  # noqa: E402
 from spotify_intelligence.recommenders.track_based import (  # noqa: E402
@@ -20,10 +23,31 @@ def recommender(tmp_path):
     return TrackRecommender(artifact_dir)
 
 
+@pytest.fixture()
+def recommender_same_work(tmp_path):
+    artifact_dir = build_tiny_recommender(
+        tmp_path / "artifacts_dup", catalog=make_same_work_catalog()
+    )
+    return TrackRecommender(artifact_dir)
+
+
 def test_no_self_recommendation(recommender):
     for group_id in recommender.catalog_index["recording_group_id"]:
         results = recommender.recommend(group_id, top_n=5)
         assert group_id not in set(results["recording_group_id"])
+
+
+def test_same_work_excluded_as_near_duplicate(recommender_same_work):
+    seed = recommender_same_work.catalog_index.iloc[0]
+    seed_name = str(seed["track_name"]).strip().casefold()
+    seed_artists = str(seed["artists"]).strip().casefold()
+    results = recommender_same_work.recommend(seed["recording_group_id"], top_n=20)
+    same_work = results[
+        results["track_name"].astype(str).str.strip().str.casefold().eq(seed_name)
+        & results["artists"].astype(str).str.strip().str.casefold().eq(seed_artists)
+    ]
+    assert same_work.empty
+    assert "g00b" not in set(results["recording_group_id"])
 
 
 def test_no_duplicate_recording_groups(recommender):

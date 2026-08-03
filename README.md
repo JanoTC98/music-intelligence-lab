@@ -78,6 +78,16 @@ Proyecto end-to-end de ciencia de datos y machine learning que transforma un cat
 - `scripts/evaluate_final_multiclass_model.py` evalúa el test congelado únicamente con `--use-test` (§17.4).
 - Notebook `notebooks/07_multiclass_classifier.ipynb`.
 
+### Módulo 8 · Aplicación Streamlit
+- Aplicación multipágina (`streamlit_app.py` como router, §18.1) con 7 páginas: Inicio, Auditoría y catálogo, Recomendar por canción, Recomendar por preferencias, Laboratorio multietiqueta, Laboratorio de género dominante y Metodología y limitaciones.
+- Carga de datos con `st.cache_data` y de modelos/escaladores/índices con `st.cache_resource` (§18.2).
+- La app **no entrena** ante artefactos ausentes: muestra el mensaje "El artefacto requerido no existe. Ejecute el script de construcción correspondiente." (§18.4).
+- Buscador desambiguado por canción + artista + álbum en `src/spotify_intelligence/recommenders/catalog.py`, con contador de coincidencias y prioridad a las canciones del artista buscado.
+- El recomendador excluye la propia grabación y también otras grabaciones de la misma canción (mismo título + artistas en otro `recording_group_id`, §3.4) para no recomendar la misma obra como primera opción.
+- Carga de artefactos de clasificación en `src/spotify_intelligence/classification/serving.py` (M1_A/M1_B multietiqueta y C1 multiclase) con selector A/B en el laboratorio multietiqueta.
+- Resultados descargables en CSV, explicaciones por característica y avisos de limitaciones; sin branding oficial de Spotify (§18.5).
+- Tracking deshabilitado por defecto (`configs/app.yaml`); Módulo 9 opcional.
+
 ## Comparativa de modelos evaluados
 
 ### Tabla 0 · Recomendador por canción — R1–R4 (§14.4)
@@ -132,6 +142,23 @@ uv sync
 uv run python -c "import spotify_intelligence"
 ```
 
+## Aplicación web
+
+La app carga los artefactos ya construidos; no entrena. Si falta un artefacto, muestra cómo generarlo.
+
+```powershell
+uv run streamlit run streamlit_app.py
+```
+
+Requisitos previos por página:
+
+| Página | Artefacto necesario | Script |
+|---|---|---|
+| Recomendar por canción | `models/recommender/v1/` | `scripts/build_recommender.py` |
+| Recomendar por preferencias | `models/preferences/v1/` | `scripts/build_preference_recommender.py` |
+| Laboratorio multietiqueta | `models/classifier/multilabel/` | `scripts/train_multilabel_classifier.py` |
+| Laboratorio de género dominante | `models/classifier/multiclass/` | `scripts/train_multiclass_classifier.py` |
+
 ## Calidad
 
 ```powershell
@@ -142,6 +169,8 @@ uv run pytest
 ## Estructura
 
 - `src/spotify_intelligence/` — código importable del proyecto.
+- `app/` — páginas y componentes de la aplicación Streamlit.
+- `streamlit_app.py` — router de la aplicación.
 - `configs/` — configuración versionada (YAML).
 - `data/` — dataset bruto, cuarentena, intermedios y procesados.
 - `tests/` — pruebas unitarias e integración.
