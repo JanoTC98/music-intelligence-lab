@@ -78,6 +78,48 @@ Proyecto end-to-end de ciencia de datos y machine learning que transforma un cat
 - `scripts/evaluate_final_multiclass_model.py` evalúa el test congelado únicamente con `--use-test` (§17.4).
 - Notebook `notebooks/07_multiclass_classifier.ipynb`.
 
+## Comparativa de modelos evaluados
+
+### Tabla 0 · Recomendador por canción — R1–R4 (§14.4)
+
+| Experimento | Escalador | Distancia | Similitud media | Latencia | Veredicto |
+|---|---|---:|---:|---:|---|
+| **R1** | Standard | coseno | 0,9794 | 14,6 ms | **Aprobado** (baseline §14.4) |
+| R2 | Robust | coseno | 0,9680 | 15,4 ms | Cercano a R1, sin ventaja |
+| R3 | Standard | euclídea | 0,4969 ¹ | 338,7 ms | Descartado (lentitud) |
+| R4 | Robust | euclídea | 0,5696 ¹ | 6,9 ms | Descartado (no comparable) |
+
+¹ La similitud euclídea no es directamente comparable con la coseno (`comparable_similarity=false`); R1 se aprueba por ser el baseline planificado.
+
+Evaluación §14.11 en producción (200 semillas, R1): 0 autorrecomendaciones · 0 duplicados de grupo · 100 % cumplimiento de filtros · similitud media 0,9729 · cobertura del catálogo 2,35 % · artistas únicos 0,94/lista · diversidad interna (std) 0,0059 · latencia p50 22,2 ms / p95 48,3 ms · estabilidad p50-Jaccard 0,919.
+
+### Tabla 0b · Recomendador por preferencias (§15) — servicio desplegado
+
+Sin comparación de modelos: es **no supervisado y determinista** (§15.10). Distancia euclídea ponderada sobre variables escaladas con pesos 0–3 (§15.6), 7 presets editables en `configs/presets.yaml` (Entrenamiento intenso, Fiesta, Concentración instrumental, Relajación, Alegre y bailable, Melancólico, Acústico), detección de perfiles fuera de distribución (percentiles p95/p99) y diversidad MMR opcional con `lambda = 0,85` — el ranking puro es el predeterminado.
+
+### Tabla 1 · Clasificador multietiqueta (§16) — métricas de validación
+
+| Modelo | samples F1 | macro F1 | Hit@5 | Hamming | Tamaño | Latencia | Veredicto |
+|---|---:|---:|---:|---:|---:|---:|---|
+| M0 · frecuencia | 0,0000 | 0,0000 | 0,052 | 0,0108 | 0,0035 MB | 6,8 ms | Baseline trivial |
+| **M1 · OvR logística** | **0,1386** | 0,1406 | 0,463 | 0,0354 | 0,08 MB | 133 ms | **Final** · test: samples F1 0,1360 |
+| M2 · Classifier Chain | 0,0718 | 0,0744 | 0,192 | 0,0611 | 0,32 MB | 5.122 ms | No viable (peor que M1, ~38× lento) |
+| M3 · Extra Trees 400 | 0,2522 | 0,2619 | 0,574 | 0,0150 | 27,8 GB | 89.978 ms | Inviable: memoria + latencia |
+| M4 · Random Forest 400 | 0,2867 | 0,2883 | 0,599 | 0,0157 | 21,7 GB | 78.437 ms | Inviable: memoria + latencia |
+
+M1 con experimento B (imputación de audio incompleto): samples F1 0,1395 → **no mejora a A (0,1386)**, por eso el experimento A es el de producción.
+
+### Tabla 2 · Clasificador multiclase (§17) — métricas de validación
+
+| Modelo | Accuracy | macro F1 | Top-5 | Tamaño | Latencia | Veredicto |
+|---|---:|---:|---:|---:|---:|---|
+| C0 · clase frecuente | 0,0120 | 0,0002 | 0,046 | 0,3 MB | 2,6 ms | Baseline trivial |
+| **C1 · logística** | **0,2247** | 0,1627 | 0,491 | 0,5 MB | 35 ms | **Final** · test: accuracy 0,2202 |
+| C2 · Extra Trees | 0,2527 | 0,1735 | 0,519 | 690 MB | 2.067 ms | No viable (peso + ~60× lento) |
+| C3 · Random Forest | 0,2866 | 0,2097 | 0,562 | 657 MB | 2.171 ms | No viable (peso + ~60× lento) |
+
+> Las latencias corresponden a la predicción sobre el **batch completo de validación** (~10,5–12,6 mil filas en una sola llamada), no a una consulta individual. Por fila: M1 ≈ 10 ms, C1 ≈ 3 ms, M3 ≈ 7 ms, M4 ≈ 6 ms, C2/C3 ≈ 0,2 ms. El criterio de descarte de árboles fue principalmente el tamaño de modelo frente a la memoria de despliegue, no la latencia por fila.
+
 ## Requisitos
 
 - Python 3.12.x
