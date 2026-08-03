@@ -1,0 +1,6 @@
+{
+  "best_threshold": 0.85,
+  "best_score": 0.13952960787159596,
+  "optimize_metric": "samples_f1",
+  "experiment": "B"
+}

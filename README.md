@@ -58,10 +58,12 @@ Proyecto end-to-end de ciencia de datos y machine learning que transforma un cat
 - Dataset multilabel con una fila por `recording_group_id` y matriz binaria `[n, 114]` (§16.2).
 - Características primarias §16.3 (`log_duration`, `key_sin/cos`, `mode`, `time_signature` one-hot fija) sin columnas prohibidas de identidad.
 - Split agrupado 70/15/15 congelado en `data/processed/splits.parquet` (hash `7cdb3f…b67`), intersecciones vacías y selección por menor desviación de prevalencia (§16.4).
-- Experimentos A (excluye `audio_analysis_incomplete`) y B (imputación con medianas de train + indicador, §16.5).
-- Modelos M0 (frecuencia) y M1 (OneVsRest logistic, liblinear C=1.0) entrenados; M2 (ClassifierChain ×3), M3 (Extra Trees 400) y M4 (Random Forest 400) listos para comparar con `scripts/compare_models.py`; M5/XGBoost deshabilitado (§16.6).
+- Experimentos A (excluye `audio_analysis_incomplete`) y B (imputación con medianas de train + indicador, §16.5); B no mejora a A (M1: samples F1 0.1395 vs 0.1386).
+- Modelos M0 (frecuencia) y M1 (OneVsRest logistic, liblinear C=1.0) entrenados; M2 (ClassifierChain ×3), M3 (Extra Trees 400) y M4 (Random Forest 400) entrenados; M5/XGBoost deshabilitado (§16.6).
 - Umbral global 0.10–0.90 optimizando samples F1 solo sobre validación (§16.8); la app muestra Top-5 con aviso de umbral no superado.
 - Métricas §16.9 (macro/micro/samples F1, Hamming, precision@3, recall@5, hit@3/5, coverage, LRAP, AP por etiqueta) en `reports/experiments/classifier_multilabel_comparison.json`.
+- Comparación final (validación): M0=0.0, M1=0.1386, M2=0.0718, M3=0.2522, M4=0.2867 samples F1. M3/M4 ganan en calidad pero son inviables para la app (22–28 GB y 78–90 s de latencia por consulta).
+- Modelo final aprobado por el propietario: **M1 (OneVsRest logistic)** por viabilidad en Streamlit (0,1 MB, ~135 ms). Evaluación única sobre test congelado en `reports/metrics/multilabel_final_test_evaluation.json` (samples F1 test=0.0314; las métricas de test son sensiblemente inferiores a las de validación, ver §16.10 y limitaciones del README).
 - `scripts/evaluate_final_model.py` evalúa el test congelado únicamente con `--use-test` (§16.4).
 - Notebook `notebooks/06_multilabel_classifier.ipynb`.
 
