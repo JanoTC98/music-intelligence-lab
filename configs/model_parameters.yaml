@@ -1,0 +1,101 @@
+version: "model-parameters-v1"
+random_state: 42
+
+multilabel:
+  frequency_baseline:
+    enabled: true
+
+  ovr_logistic:
+    enabled: true
+    estimator:
+      solver: "liblinear"
+      C: 1.0
+      max_iter: 2000
+      class_weight: "balanced"
+      random_state: 42
+    wrapper_n_jobs: -1
+
+  classifier_chain:
+    enabled: true
+    base_estimator: "logistic_regression"
+    order: "random"
+    seeds: [42, 43, 44]
+
+  extra_trees:
+    enabled: true
+    n_estimators: 400
+    max_depth: null
+    min_samples_split: 2
+    min_samples_leaf: 2
+    max_features: "sqrt"
+    bootstrap: false
+    class_weight: null
+    n_jobs: -1
+    random_state: 42
+
+  random_forest:
+    enabled: true
+    n_estimators: 400
+    max_depth: null
+    min_samples_split: 2
+    min_samples_leaf: 2
+    max_features: "sqrt"
+    bootstrap: true
+    class_weight: null
+    n_jobs: -1
+    random_state: 42
+
+  xgboost_ovr:
+    enabled: false
+    n_estimators: 300
+    max_depth: 6
+    learning_rate: 0.05
+    subsample: 0.80
+    colsample_bytree: 0.80
+    min_child_weight: 1
+    reg_lambda: 1.0
+    objective: "binary:logistic"
+    eval_metric: "logloss"
+    tree_method: "hist"
+    random_state: 42
+
+  threshold_search:
+    min: 0.10
+    max: 0.90
+    step: 0.05
+    optimize_metric: "samples_f1"
+
+multiclass:
+  frequent_class_baseline:
+    enabled: true
+
+  logistic:
+    enabled: true
+    solver: "lbfgs"
+    C: 1.0
+    max_iter: 3000
+    class_weight: "balanced"
+    random_state: 42
+
+  extra_trees:
+    enabled: true
+    n_estimators: 500
+    max_depth: null
+    min_samples_leaf: 2
+    max_features: "sqrt"
+    class_weight: "balanced"
+    n_jobs: -1
+    random_state: 42
+
+  random_forest:
+    enabled: true
+    n_estimators: 500
+    max_depth: null
+    min_samples_leaf: 2
+    max_features: "sqrt"
+    class_weight: "balanced"
+    n_jobs: -1
+    random_state: 42
+
+  xgboost:
+    enabled: false

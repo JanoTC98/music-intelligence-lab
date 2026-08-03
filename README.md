@@ -54,6 +54,17 @@ Proyecto end-to-end de ciencia de datos y machine learning que transforma un cat
 - Artefactos versionados en `models/preferences/v1/`.
 - Notebook `notebooks/05_preference_recommender_experiments.ipynb`.
 
+### Módulo 6 · Clasificador multietiqueta de géneros
+- Dataset multilabel con una fila por `recording_group_id` y matriz binaria `[n, 114]` (§16.2).
+- Características primarias §16.3 (`log_duration`, `key_sin/cos`, `mode`, `time_signature` one-hot fija) sin columnas prohibidas de identidad.
+- Split agrupado 70/15/15 congelado en `data/processed/splits.parquet` (hash `7cdb3f…b67`), intersecciones vacías y selección por menor desviación de prevalencia (§16.4).
+- Experimentos A (excluye `audio_analysis_incomplete`) y B (imputación con medianas de train + indicador, §16.5).
+- Modelos M0 (frecuencia) y M1 (OneVsRest logistic, liblinear C=1.0) entrenados; M2 (ClassifierChain ×3), M3 (Extra Trees 400) y M4 (Random Forest 400) listos para comparar con `scripts/compare_models.py`; M5/XGBoost deshabilitado (§16.6).
+- Umbral global 0.10–0.90 optimizando samples F1 solo sobre validación (§16.8); la app muestra Top-5 con aviso de umbral no superado.
+- Métricas §16.9 (macro/micro/samples F1, Hamming, precision@3, recall@5, hit@3/5, coverage, LRAP, AP por etiqueta) en `reports/experiments/classifier_multilabel_comparison.json`.
+- `scripts/evaluate_final_model.py` evalúa el test congelado únicamente con `--use-test` (§16.4).
+- Notebook `notebooks/06_multilabel_classifier.ipynb`.
+
 ## Requisitos
 
 - Python 3.12.x

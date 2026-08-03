@@ -1,0 +1,48 @@
+version: "classifier-features-v1"
+
+primary_audio_features:
+  continuous:
+    - "danceability"
+    - "energy"
+    - "loudness"
+    - "speechiness"
+    - "acousticness"
+    - "instrumentalness"
+    - "liveness"
+    - "valence"
+    - "tempo"
+  engineered:
+    - "log_duration"
+    - "key_sin"
+    - "key_cos"
+  binary:
+    - "mode"
+  categorical_one_hot:
+    - "time_signature"
+
+context_variant:
+  enabled: false
+  additional_features:
+    - "popularity_median"
+    - "explicit"
+
+forbidden_features:
+  - "track_id"
+  - "recording_group_id"
+  - "track_name"
+  - "artists"
+  - "album_name"
+  - "track_genre"
+
+splits:
+  train_fraction: 0.70
+  validation_fraction: 0.15
+  test_fraction: 0.15
+  group_column: "recording_group_id"
+  random_state: 42
+  candidate_split_count: 50
+  freeze_test: true
+
+incomplete_audio_experiments:
+  - "exclude"
+  - "train_only_imputation_with_indicator"
