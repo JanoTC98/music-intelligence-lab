@@ -63,9 +63,20 @@ Proyecto end-to-end de ciencia de datos y machine learning que transforma un cat
 - Umbral global 0.10–0.90 optimizando samples F1 solo sobre validación (§16.8); la app muestra Top-5 con aviso de umbral no superado.
 - Métricas §16.9 (macro/micro/samples F1, Hamming, precision@3, recall@5, hit@3/5, coverage, LRAP, AP por etiqueta) en `reports/experiments/classifier_multilabel_comparison.json`.
 - Comparación final (validación): M0=0.0, M1=0.1386, M2=0.0718, M3=0.2522, M4=0.2867 samples F1. M3/M4 ganan en calidad pero son inviables para la app (22–28 GB y 78–90 s de latencia por consulta).
-- Modelo final aprobado por el propietario: **M1 (OneVsRest logistic)** por viabilidad en Streamlit (0,1 MB, ~135 ms). Evaluación única sobre test congelado en `reports/metrics/multilabel_final_test_evaluation.json` (samples F1 test=0.0314; las métricas de test son sensiblemente inferiores a las de validación, ver §16.10 y limitaciones del README).
+- Modelo final aprobado por el propietario: **M1 (OneVsRest logistic)** por viabilidad en Streamlit (0,1 MB, ~135 ms). Evaluación única sobre test congelado en `reports/metrics/multilabel_final_test_evaluation.json` (samples F1 test=0.1360, macro F1=0.1377, hit@5=0.4573, Hamming=0.0352), consistente con validación (0.1386). *Nota: una primera versión de este reporte registró 0.0314 por un doble-escalado (`scaler.transform` sobre un test ya escalado); corregido en `scripts/evaluate_final_model.py` y re-evaluado.*
 - `scripts/evaluate_final_model.py` evalúa el test congelado únicamente con `--use-test` (§16.4).
 - Notebook `notebooks/06_multilabel_classifier.ipynb`.
+
+### Módulo 7 · Clasificador multiclase de género dominante
+- Dataset de grabaciones monoetiqueta (§17.1): 69.943 grupos; split agrupado congelado train 48.987 / validación 10.496 / test 10.460; 112/114 clases en train (conteos 47–717).
+- Modelos C0 (clase frecuente), C1 (logística lbfgs C=1.0), C2 (Extra Trees) y C3 (Random Forest) con `max_depth=12` y `n_estimators=300` (§17.3).
+- Comparación (validación): C0 acc 0.0120, C1 acc 0.2247, C2 acc 0.2527, C3 acc 0.2866 (macro F1 0.0002 / 0.1627 / 0.1735 / 0.2097). Reporte en `reports/experiments/classifier_multiclass_comparison.json`.
+- C2/C3 ganan en calidad pero pesan ~650 MB cada uno; el propietario aprobó **C1** como modelo final (~0,5 MB, viable en Streamlit). C2/C3 se eliminaron tras consolidar el reporte.
+- Métricas §17.4 sobre validación en `models/classifier/multiclass/<id_C1>/metrics_validation.json`.
+- Evaluación exploratoria §17.5 sobre filas multigénero: validación Hit@1=0.195, Hit@3=0.393, Recall@5=0.284 (2.086 filas); test Hit@1=0.179, Hit@3=0.366, Recall@5=0.263 (2.123 filas).
+- Evaluación única sobre test congelado en `reports/metrics/multiclass_final_test_evaluation.json` (accuracy test=0.2202, macro F1=0.1606), consistente con validación.
+- `scripts/evaluate_final_multiclass_model.py` evalúa el test congelado únicamente con `--use-test` (§17.4).
+- Notebook `notebooks/07_multiclass_classifier.ipynb`.
 
 ## Requisitos
 

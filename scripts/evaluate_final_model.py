@@ -56,7 +56,6 @@ def main() -> None:
 
     experiment = manifest["experiment"]
     model = joblib.load(artifact_dir / "model.joblib")
-    scaler = joblib.load(artifact_dir / "scaler.joblib")
     threshold = json.loads((artifact_dir / "threshold.json").read_text(encoding="utf-8"))[
         "best_threshold"
     ]
@@ -64,8 +63,11 @@ def main() -> None:
     encoder = GenreLabelEncoder.load(encoder_payload)
 
     # Rebuild the frozen test split with the same pipeline as training.
+    # ``data.X_test`` is already scaled by ``prepare_training_data``; applying
+    # ``scaler.transform`` again would double-standardize the features and
+    # invalidate the metrics.
     data = prepare_training_data(experiment=experiment, include_test=True)
-    X_test = scaler.transform(data.X_test)
+    X_test = data.X_test
     Y_test = data.Y_test
 
     scores = predict_proba_scores(model, X_test)

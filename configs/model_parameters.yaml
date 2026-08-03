@@ -79,8 +79,8 @@ multiclass:
 
   extra_trees:
     enabled: true
-    n_estimators: 500
-    max_depth: null
+    n_estimators: 300
+    max_depth: 12
     min_samples_leaf: 2
     max_features: "sqrt"
     class_weight: "balanced"
@@ -89,8 +89,8 @@ multiclass:
 
   random_forest:
     enabled: true
-    n_estimators: 500
-    max_depth: null
+    n_estimators: 300
+    max_depth: 12
     min_samples_leaf: 2
     max_features: "sqrt"
     class_weight: "balanced"
