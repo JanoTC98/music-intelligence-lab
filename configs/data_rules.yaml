@@ -36,6 +36,7 @@ cleaning:
   identity_required:
     - "track_id"
     - "artists"
+    - "album_name"
     - "track_name"
   short_track_threshold_ms: 60000
   long_track_threshold_ms: 600000

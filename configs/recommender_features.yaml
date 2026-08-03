@@ -42,6 +42,7 @@ track_recommender:
     duration_suggested_max_seconds: 600
     different_artist_default: false
     popularity_min_enabled_default: false
+    popularity_min_suggested: 50
 
 preference_recommender:
   basic_features:

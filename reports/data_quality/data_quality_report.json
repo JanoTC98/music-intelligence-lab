@@ -1,7 +1,7 @@
 {
   "dataset_hash": "b202fa49909b2d5cef71a04b1d21243cfeb36414535f2ca9272aa646721177bd",
   "pipeline_version": "1.0",
-  "generated_at_utc": "2026-08-02T13:44:31.197163+00:00",
+  "generated_at_utc": "2026-08-03T01:01:45.901610+00:00",
   "raw_rows": 114000,
   "raw_columns": 21,
   "columns_present": [
@@ -71,6 +71,12 @@
         "value": 0
       }
     ]
+  },
+  "extremes": {
+    "loudness": {
+      "min": -49.531,
+      "max": 4.532
+    }
   },
   "track_ids_unique": 89741,
   "rows_minus_unique_ids": 24259,

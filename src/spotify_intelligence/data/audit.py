@@ -18,6 +18,7 @@ from spotify_intelligence.data.load import load_dataset
 from spotify_intelligence.data.validate import (
     check_required_columns,
     detect_incomplete_audio,
+    report_column_extremes,
     validate_column_ranges,
 )
 
@@ -109,6 +110,8 @@ def audit_dataset(
         col: [{"row": int(r), "value": v} for r, v in violators]
         for col, violators in range_violations.items()
     }
+
+    report["extremes"] = report_column_extremes(df)
 
     track_ids = df["track_id"].nunique() if "track_id" in df.columns else 0
     report["track_ids_unique"] = int(track_ids)

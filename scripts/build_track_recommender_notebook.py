@@ -220,7 +220,12 @@ configuraciones euclídeas (R3, R4) la columna `mean_similarity` usa `1 - distan
 pero la distancia euclídea no está acotada en [0, 1], por lo que ese valor **no
 es comparable** con el de las configuraciones coseno; lo que sí es comparable
 es la latencia y el cumplimiento de autorrecomendación/duplicados. La latencia
-media por consulta es de ~15 ms en R1/R2 y de 210–423 ms en R3/R4.
+media por consulta con el catálogo completo es de ~15 ms en R1/R2; R4 (euclídea
++ RobustScaler) también es rápida (decenas de ms) mientras que R3 (euclídea +
+StandardScaler) suele ser la más lenta (varios cientos de ms). Los valores
+exactos se guardan en
+`reports/experiments/track_recommender_r1_r4_comparison.json` y varían según el
+equipo y la carga.
 
 **Limitación:** las métricas de cobertura sobre 5 semillas no representan la
 cobertura real del catálogo; la evaluación completa (módulo 4, evaluación

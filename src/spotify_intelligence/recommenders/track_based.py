@@ -9,6 +9,7 @@ import numpy as np
 import pandas as pd
 
 from spotify_intelligence.recommenders.errors import ArtifactNotFoundError
+from spotify_intelligence.recommenders.explanations import explain_feature_differences
 from spotify_intelligence.recommenders.scoring import cosine_similarity_from_distance
 
 ARTIFACT_FILES = (
@@ -37,12 +38,17 @@ class RecommendationFilters:
     @classmethod
     def from_config(cls, config: dict[str, Any]) -> RecommendationFilters:
         filters_config = config["track_recommender"]["filters"]
+        popularity_enabled = bool(filters_config.get("popularity_min_enabled_default", False))
+        popularity_min = None
+        if popularity_enabled:
+            popularity_min = int(filters_config.get("popularity_min_suggested", 50))
         return cls(
             explicit=str(filters_config.get("explicit_default", "all")),
             duration_enabled=bool(filters_config.get("duration_enabled_default", False)),
             duration_min_seconds=int(filters_config.get("duration_suggested_min_seconds", 60)),
             duration_max_seconds=int(filters_config.get("duration_suggested_max_seconds", 600)),
             different_artist=bool(filters_config.get("different_artist_default", False)),
+            popularity_min=popularity_min,
         )
 
 
@@ -94,8 +100,13 @@ class TrackRecommender:
         *,
         top_n: int = 10,
         filters: RecommendationFilters | None = None,
+        include_explanations: bool = True,
     ) -> pd.DataFrame:
-        """Return a DataFrame with the Top-N recommendations for a seed recording."""
+        """Return a DataFrame with the Top-N recommendations for a seed recording.
+
+        When ``include_explanations`` is True, a ``feature_differences`` column
+        lists per-feature differences between the seed and each result (§14.9).
+        """
         filters = filters or RecommendationFilters()
         seed_row = self._seed_row_position(recording_group_id)
         query = self.catalog_matrix[seed_row : seed_row + 1]
@@ -110,7 +121,31 @@ class TrackRecommender:
         results["similarity"] = similarities
         results = self._deduplicate_groups(results)
         results = results.sort_values(["similarity", "recording_group_id"], ascending=[False, True])
-        return results.head(top_n).reset_index(drop=True)
+        results = results.head(top_n).reset_index(drop=True)
+
+        if include_explanations:
+            results["feature_differences"] = self._explain_row(seed_row, results)
+        return results
+
+    def _explain_row(
+        self,
+        seed_row: int,
+        results: pd.DataFrame,
+    ) -> list[list[dict[str, Any]]]:
+        """Per-feature differences between the seed and each result row."""
+        features = self.feature_columns
+        seed_values = {
+            feature: float(self.catalog_index.iloc[seed_row][feature]) for feature in features
+        }
+        std_scale = {
+            feature: float(self.catalog_matrix[:, idx].std())
+            for idx, feature in enumerate(features)
+        }
+        rows: list[list[dict[str, Any]]] = []
+        for _, candidate in results.iterrows():
+            candidate_values = {feature: float(candidate[feature]) for feature in features}
+            rows.append(explain_feature_differences(seed_values, candidate_values, std_scale))
+        return rows
 
     def _retrieve_candidates(
         self,
@@ -124,15 +159,19 @@ class TrackRecommender:
         multiplier = int(config.get("candidate_multiplier", 10))
         expansion_steps = list(config.get("expansion_steps", [500, 2000]))
 
+        full_size = self.catalog_matrix.shape[0]
         k_values = [max(floor, top_n * multiplier), *expansion_steps]
-        for k in k_values:
-            if k >= self.catalog_matrix.shape[0]:
-                k = self.catalog_matrix.shape[0]
-                k_values = [k]
-                break
 
+        if k_values[0] >= full_size:
+            k_values = [full_size]
+        else:
+            # §14.7: último recurso = catálogo completo elegible.
+            k_values = [k for k in k_values if k < full_size] + [full_size]
+
+        best_rows: list[int] = []
+        best_dists: list[float] = []
         for k in k_values:
-            n_neighbors = min(k + 1, self.catalog_matrix.shape[0])
+            n_neighbors = min(k + 1, full_size)
             distances, indices = self.neighbors.kneighbors(query, n_neighbors=n_neighbors)
             rows = [int(i) for i in indices[0] if int(i) != seed_row]
             dists = [
@@ -141,9 +180,11 @@ class TrackRecommender:
                 if int(i) != seed_row
             ]
             rows, dists = self._apply_filters(rows, dists, seed_row, filters)
-            if len(rows) >= top_n or k == self.catalog_matrix.shape[0]:
+            if len(rows) > len(best_rows):
+                best_rows, best_dists = rows, dists
+            if len(rows) >= top_n or k == full_size:
                 return rows, dists
-        return [], []
+        return best_rows, best_dists
 
     def _apply_filters(
         self,

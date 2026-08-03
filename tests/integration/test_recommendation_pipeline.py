@@ -13,7 +13,7 @@ def test_build_then_recommend(tmp_path):
     recommender = TrackRecommender(artifact_dir)
     catalog = recommender.catalog_index
 
-    assert len(catalog) == 8
+    assert len(catalog) == 7  # g07 es audio_analysis_incomplete y se excluye
     group_id = catalog.iloc[0]["recording_group_id"]
     results = recommender.recommend(group_id, top_n=3)
 

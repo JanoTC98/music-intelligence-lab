@@ -1,0 +1,35 @@
+{
+  "version": "v1",
+  "pipeline": "preference_recommender",
+  "features": [
+    "energy",
+    "danceability",
+    "valence",
+    "acousticness",
+    "instrumentalness",
+    "tempo"
+  ],
+  "scaler": "standard",
+  "distance": "weighted_euclidean",
+  "weight_scale": {
+    "min": 0,
+    "max": 3
+  },
+  "out_of_distribution": {
+    "warning_percentile": 95,
+    "weak_match_percentile": 99
+  },
+  "diversity": {
+    "enabled_default": false,
+    "method": "mmr",
+    "lambda_default": 0.85
+  },
+  "filters": {},
+  "presets_config": "configs/presets.yaml",
+  "catalog_size": 83736,
+  "dataset_sha256": "b202fa49909b2d5cef71a04b1d21243cfeb36414535f2ca9272aa646721177bd",
+  "config_sha256": "1b68a0b7805b28133f7a4d2306edfe3c6994ff8c23e7049d6a0aa6f96013a506",
+  "git_commit": "931394e3180f7f64ee19c09c5b7c81f67e0afada",
+  "generated_at_utc": "2026-08-02T16:55:04.047297+00:00",
+  "artifact_dir": "models\\preferences\\v1"
+}

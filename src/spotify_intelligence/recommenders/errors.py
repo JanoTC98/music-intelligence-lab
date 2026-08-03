@@ -7,3 +7,7 @@ class ArtifactNotFoundError(Exception):
 
 class IncompatibleArtifactError(Exception):
     """Raised when a recommender artifact is not compatible with the request."""
+
+
+class InvalidPreferenceProfileError(Exception):
+    """Raised when a preference profile is missing values or has invalid weights."""

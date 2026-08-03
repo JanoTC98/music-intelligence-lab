@@ -45,6 +45,15 @@ Proyecto end-to-end de ciencia de datos y machine learning que transforma un cat
 - Comparación R1–R4 en `reports/experiments/track_recommender_r1_r4_comparison.json`.
 - Notebook `notebooks/04_track_recommender_experiments.ipynb`.
 
+### Módulo 5 · Recomendador por preferencias
+- Presets editables en `configs/presets.yaml` (7 presets con valores y pesos 0–3, §32.6) sin tocar Python.
+- Distancia euclídea ponderada sobre variables escaladas (§15.6): el peso 0 ignora la variable y se rechazan los perfiles con todos los pesos en cero.
+- Modo manual con pesos por variable (0–3) y modo preset.
+- Detección de perfiles fuera de distribución (§15.8) por distancia al centroide del catálogo (percentiles p95/p99 precomputados).
+- Diversidad MMR opcional (§15.9) con `lambda = 0,85`; el ranking puro es el predeterminado.
+- Artefactos versionados en `models/preferences/v1/`.
+- Notebook `notebooks/05_preference_recommender_experiments.ipynb`.
+
 ## Requisitos
 
 - Python 3.12.x

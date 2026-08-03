@@ -14,6 +14,12 @@ def test_compute_file_hash():
     assert len(h) == 64
 
 
+def test_raw_dataset_hash_regression():
+    """The raw dataset is immutable (§12); its SHA-256 is a regression anchor."""
+    expected = "b202fa49909b2d5cef71a04b1d21243cfeb36414535f2ca9272aa646721177bd"
+    assert compute_file_hash("data/raw/dataset.csv") == expected
+
+
 def test_audit_dataset_returns_report():
     df = pd.read_csv("data/raw/dataset.csv")
     report = audit_dataset(df, "data/raw/dataset.csv")
@@ -46,3 +52,4 @@ def test_audit_numbers_match_agents():
     assert report["duration"]["long_tracks_over_10min"] == 603
     assert report["popularity"]["zero_count"] == 16020
     assert report["tempo_zero_count"] == 157
+    assert report["extremes"]["loudness"]["min"] < report["extremes"]["loudness"]["max"]

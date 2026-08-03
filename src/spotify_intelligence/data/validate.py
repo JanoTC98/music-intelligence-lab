@@ -66,3 +66,29 @@ def detect_incomplete_audio(
             mask = mask & (df[col] == 0)
 
     return mask
+
+
+def report_column_extremes(
+    df: pd.DataFrame,
+    ranges: dict[str, dict[str, Any]] | None = None,
+) -> dict[str, dict[str, float]]:
+    """Report min/max for columns configured with ``report_extremes: True``.
+
+    Used by the audit for unbounded numeric columns such as ``loudness``
+    (AGENTS.md §11).
+    """
+    if ranges is None:
+        ranges = get_validation_ranges()
+
+    extremes: dict[str, dict[str, float]] = {}
+    for col, rules in ranges.items():
+        if not rules.get("report_extremes") or col not in df.columns:
+            continue
+        series = pd.to_numeric(df[col], errors="coerce").dropna()
+        if series.empty:
+            continue
+        extremes[col] = {
+            "min": float(series.min()),
+            "max": float(series.max()),
+        }
+    return extremes

@@ -1,0 +1,124 @@
+version: "presets-v1"
+weight_scale:
+  min: 0
+  max: 3
+
+presets:
+  entrenamiento_intenso:
+    label: "Entrenamiento intenso"
+    values:
+      energy: 0.90
+      danceability: 0.75
+      valence: 0.65
+      acousticness: 0.05
+      instrumentalness: 0.05
+      tempo: 145
+    weights:
+      energy: 3
+      danceability: 2
+      valence: 1
+      acousticness: 2
+      instrumentalness: 1
+      tempo: 2
+
+  fiesta:
+    label: "Fiesta"
+    values:
+      energy: 0.85
+      danceability: 0.90
+      valence: 0.75
+      acousticness: 0.05
+      instrumentalness: 0.02
+      tempo: 128
+    weights:
+      energy: 2
+      danceability: 3
+      valence: 2
+      acousticness: 1
+      instrumentalness: 1
+      tempo: 2
+
+  concentracion_instrumental:
+    label: "Concentración instrumental"
+    values:
+      energy: 0.35
+      danceability: 0.30
+      valence: 0.45
+      acousticness: 0.55
+      instrumentalness: 0.85
+      tempo: 90
+    weights:
+      energy: 1
+      danceability: 1
+      valence: 1
+      acousticness: 2
+      instrumentalness: 3
+      tempo: 1
+
+  relajacion:
+    label: "Relajación"
+    values:
+      energy: 0.25
+      danceability: 0.35
+      valence: 0.55
+      acousticness: 0.75
+      instrumentalness: 0.45
+      tempo: 80
+    weights:
+      energy: 2
+      danceability: 1
+      valence: 1
+      acousticness: 2
+      instrumentalness: 1
+      tempo: 2
+
+  alegre_y_bailable:
+    label: "Alegre y bailable"
+    values:
+      energy: 0.72
+      danceability: 0.85
+      valence: 0.88
+      acousticness: 0.08
+      instrumentalness: 0.02
+      tempo: 124
+    weights:
+      energy: 2
+      danceability: 3
+      valence: 3
+      acousticness: 1
+      instrumentalness: 1
+      tempo: 2
+
+  melancolico:
+    label: "Melancólico"
+    values:
+      energy: 0.30
+      danceability: 0.35
+      valence: 0.15
+      acousticness: 0.60
+      instrumentalness: 0.20
+      tempo: 85
+    weights:
+      energy: 2
+      danceability: 1
+      valence: 3
+      acousticness: 2
+      instrumentalness: 1
+      tempo: 1
+
+  acustico:
+    label: "Acústico"
+    values:
+      energy: 0.40
+      danceability: 0.45
+      valence: 0.55
+      acousticness: 0.90
+      instrumentalness: 0.05
+      tempo: 95
+    weights:
+      energy: 1
+      danceability: 1
+      valence: 1
+      acousticness: 3
+      instrumentalness: 1
+      tempo: 1

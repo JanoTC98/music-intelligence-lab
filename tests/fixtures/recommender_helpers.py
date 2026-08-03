@@ -9,9 +9,11 @@ import pandas as pd
 from sklearn.neighbors import NearestNeighbors
 from sklearn.preprocessing import StandardScaler
 
+from spotify_intelligence.features.presets import BASIC_FEATURES
 from spotify_intelligence.recommenders.scoring import RECOMMENDER_FEATURES
 
 FEATURES = list(RECOMMENDER_FEATURES)
+PREFERENCE_FEATURES = list(BASIC_FEATURES)
 
 
 def make_catalog_index(n: int = 8) -> pd.DataFrame:
@@ -29,6 +31,7 @@ def make_catalog_index(n: int = 8) -> pd.DataFrame:
             "duration_ms": int(120000 + i * 60000),
             "popularity_median": float(20 + i),
             "explicit": bool(i % 2),
+            "audio_analysis_incomplete": i == 7,
         }
         for feature in FEATURES:
             row[feature] = float(rng.uniform(0.0, 1.0))
@@ -43,7 +46,8 @@ def build_tiny_recommender(artifact_dir: str | Path) -> Path:
     out.mkdir(parents=True, exist_ok=True)
 
     catalog = make_catalog_index(n=8)
-    matrix = catalog[FEATURES].to_numpy(dtype=float)
+    eligible = catalog[~catalog["audio_analysis_incomplete"]].reset_index(drop=True)
+    matrix = eligible[FEATURES].to_numpy(dtype=float)
     scaled = (matrix - matrix.mean(axis=0)) / matrix.std(axis=0)
 
     neighbors = NearestNeighbors(n_neighbors=len(scaled), metric="cosine", algorithm="brute")
@@ -55,7 +59,7 @@ def build_tiny_recommender(artifact_dir: str | Path) -> Path:
     joblib.dump(scaler, out / "scaler.joblib")
     joblib.dump(neighbors, out / "neighbors.joblib")
     np.save(out / "catalog_matrix.npy", scaled)
-    catalog.to_parquet(out / "catalog_index.parquet", index=False)
+    eligible.to_parquet(out / "catalog_index.parquet", index=False)
 
     manifest = {
         "version": "test",
@@ -73,6 +77,52 @@ def build_tiny_recommender(artifact_dir: str | Path) -> Path:
             "expansion_steps": [500, 2000],
         },
         "exclusions": {"audio_analysis_incomplete": True, "same_recording_group": True},
+        "catalog_size": len(eligible),
+        "artifact_dir": str(out),
+    }
+    with open(out / "manifest.json", "w", encoding="utf-8") as f:
+        json.dump(manifest, f, indent=2)
+    return out
+
+
+def build_tiny_preference_recommender(artifact_dir: str | Path) -> Path:
+    """Create a minimal preference recommender artifact set and return its dir."""
+    out = Path(artifact_dir)
+    out.mkdir(parents=True, exist_ok=True)
+
+    catalog = make_catalog_index(n=8)
+    matrix = catalog[PREFERENCE_FEATURES].to_numpy(dtype=float)
+
+    scaler = StandardScaler()
+    scaled = scaler.fit_transform(matrix)
+
+    centroid = scaled.mean(axis=0)
+    distances = np.linalg.norm(scaled - centroid, axis=1)
+    ood_reference = {
+        "centroid": centroid.tolist(),
+        "percentiles": {
+            "95": float(np.percentile(distances, 95)),
+            "99": float(np.percentile(distances, 99)),
+        },
+        "warning_percentile": 95,
+        "weak_match_percentile": 99,
+    }
+
+    joblib.dump(scaler, out / "scaler.joblib")
+    np.save(out / "catalog_matrix.npy", scaled)
+    catalog.to_parquet(out / "catalog_index.parquet", index=False)
+    with open(out / "ood_reference.json", "w", encoding="utf-8") as f:
+        json.dump(ood_reference, f, indent=2)
+
+    manifest = {
+        "version": "test",
+        "pipeline": "preference_recommender",
+        "features": PREFERENCE_FEATURES,
+        "scaler": "standard",
+        "distance": "weighted_euclidean",
+        "weight_scale": {"min": 0, "max": 3},
+        "out_of_distribution": {"warning_percentile": 95, "weak_match_percentile": 99},
+        "diversity": {"enabled_default": False, "method": "mmr", "lambda_default": 0.85},
         "catalog_size": len(catalog),
         "artifact_dir": str(out),
     }

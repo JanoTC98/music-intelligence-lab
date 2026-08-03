@@ -102,6 +102,7 @@ def run_experiment(
         "id": EXP_ID_NAMES[(scaler_name, metric)],
         "scaler": scaler_name,
         "metric": metric,
+        "comparable_similarity": metric == "cosine",
         "queries": n_queries,
         "total_results": sum(s["n"] for s in per_seed),
         "self_recommendations": self_recommendations,
