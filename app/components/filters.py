@@ -126,6 +126,13 @@ def render_preference_profile(
     )
     selected = presets[preset_key]
 
+    last_preset_key = f"{prefix}_last_preset"
+    if st.session_state.get(last_preset_key) != preset_key:
+        for feature in BASIC_FEATURES:
+            st.session_state.pop(f"{prefix}_value_{feature}", None)
+            st.session_state.pop(f"{prefix}_weight_{feature}", None)
+        st.session_state[last_preset_key] = preset_key
+
     with st.expander("Editar valores", expanded=True):
         values: dict[str, float] = {}
         for feature in BASIC_FEATURES:
