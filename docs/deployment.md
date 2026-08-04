@@ -26,7 +26,7 @@ defecto** y que la Opción A des-ignora en `.gitignore`:
 | Datos procesados | `data/processed/` | 58 MB (9 parquet + 2 JSON) | `tracks.parquet` (16,1 MB) |
 | Recomendador por canción | `models/recommender/v1/` | 23,8 MB (nuevo: 11,8 MB) | `catalog_index.parquet` (12,3 MB) |
 | Recomendador por preferencias | `models/preferences/v1/` | 15,6 MB (nuevo: 3,9 MB) | `catalog_index.parquet` (11,8 MB) |
-| Clasificadores (serving) | `models/classifier/` (M1_A y C1) | 0,1 MB (nuevo) | < 1 MB |
+| Clasificadores (serving) | `models/classifier/` (M1_A, M1_B y C1) | 0,2 MB (nuevo) | < 1 MB |
 
 Total añadido ≈ **74 MB**. Todos los archivos individuales están muy por debajo
 del límite de 100 MB por archivo de GitHub.
@@ -36,8 +36,9 @@ Notas:
 - `data/raw/dataset.csv` **no** se versiona; solo viajan los parquet derivados.
   Los datos derivados se publican bajo la licencia del dataset fuente (CC
   BY-NC-SA 4.0 en la versión habitual, ver `data/README.md`).
-- Los joblibs de experimentos de clasificación (M0, M2, variante B, C0) no se
-  cargan en la aplicación y permanecen ignorados.
+- Los joblibs de experimentos de clasificación no expuestos en la aplicación
+  (M0, M2 y C0) no se cargan y permanecen ignorados; M1_A, M1_B y C1 sí se
+  versionan porque el laboratorio multietiqueta y el de género dominante los sirven.
 - Opciones descartadas: **B** (sin artefactos, la app no funciona) y **C**
   (artefactos externos, complejidad innecesaria para V1).
 

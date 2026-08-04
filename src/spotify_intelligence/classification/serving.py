@@ -112,6 +112,34 @@ def _read_manifest(artifact_dir: Path) -> dict[str, Any]:
     return json.loads(manifest_path.read_text(encoding="utf-8"))
 
 
+def _require_artifact_file(artifact_dir: Path, filename: str) -> Path:
+    """Return an artifact path or raise a controlled ``DataContractError``.
+
+    A bundle directory can exist (e.g. manifests tracked in git) while a
+    joblib is missing on disk. Raising a typed error instead of a raw
+    ``FileNotFoundError`` lets the app render §18.4 messaging.
+    """
+    path = artifact_dir / filename
+    if not path.exists():
+        raise DataContractError(f"Missing classifier artifact {filename} in {artifact_dir}")
+    return path
+
+
+def load_validation_metrics(
+    kind: str,
+    model_key: str,
+    models_dir: str | Path = MODELS_DIR,
+) -> dict[str, Any] | None:
+    """Return the saved validation metrics for a serving bundle (§18.5)."""
+    import json
+
+    artifact_dir = _find_artifact_dir(kind, model_key, models_dir)
+    path = artifact_dir / "metrics_validation.json"
+    if not path.exists():
+        return None
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
 def _load_encoder(artifact_dir: Path) -> GenreLabelEncoder:
     payload_path = artifact_dir / "genre_encoder.json"
     if not payload_path.exists():
@@ -133,8 +161,8 @@ def load_multilabel_serving(
         experiment_id=manifest["experiment_id"],
         model_id=manifest["model_id"],
         experiment=str(manifest.get("experiment", "A")),
-        model=joblib.load(artifact_dir / "model.joblib"),
-        scaler=joblib.load(artifact_dir / "scaler.joblib"),
+        model=joblib.load(_require_artifact_file(artifact_dir, "model.joblib")),
+        scaler=joblib.load(_require_artifact_file(artifact_dir, "scaler.joblib")),
         threshold=threshold,
         encoder=_load_encoder(artifact_dir),
         manifest=manifest,
@@ -148,13 +176,13 @@ def load_multiclass_serving(
     """Load the final multiclass artifacts (C1 logistic by default)."""
     artifact_dir = _find_artifact_dir("multiclass", model_key, models_dir)
     manifest = _read_manifest(artifact_dir)
-    model = joblib.load(artifact_dir / "model.joblib")
+    model = joblib.load(_require_artifact_file(artifact_dir, "model.joblib"))
     return MulticlassServing(
         experiment_id=manifest["experiment_id"],
         model_id=manifest["model_id"],
         experiment=str(manifest.get("experiment", "A")),
         model=model,
-        scaler=joblib.load(artifact_dir / "scaler.joblib"),
+        scaler=joblib.load(_require_artifact_file(artifact_dir, "scaler.joblib")),
         classes_=model_classes(model),
         encoder=_load_encoder(artifact_dir),
         manifest=manifest,

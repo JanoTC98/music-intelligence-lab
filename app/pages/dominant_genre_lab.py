@@ -7,9 +7,11 @@ import streamlit as st
 from app.components import charts, filters, messages, resources
 from app.components.cards import seed_track_card
 from spotify_intelligence.classification.serving import (
+    load_validation_metrics,
     predict_multiclass_recording,
     select_recording_row,
 )
+from spotify_intelligence.data.contracts import DataContractError
 from spotify_intelligence.recommenders.catalog import genres_for_recording
 from spotify_intelligence.recommenders.errors import ArtifactNotFoundError
 
@@ -36,11 +38,15 @@ def render() -> None:
 
     try:
         serving = resources.load_multiclass_serving()
-    except ArtifactNotFoundError:
+    except (ArtifactNotFoundError, DataContractError, FileNotFoundError, OSError):
         messages.missing_artifact("Clasificador de género dominante")
         return
 
     st.caption(f"Modelo {serving.model_id} · experimento {serving.experiment}")
+    messages.render_validation_metrics(
+        load_validation_metrics("multiclass", "C1"),
+        kind="multiclass",
+    )
 
     true_genres = genres_for_recording(bridge, group)
     if true_genres:
@@ -73,6 +79,11 @@ def render() -> None:
         messages.info_note(
             "El género estimado no reemplaza las etiquetas originales de una "
             "canción multigénero (§17.5). Las puntuaciones no están calibradas."
+        )
+        messages.warn_note(
+            "Modelo experimental: con solo 18 características acústicas la "
+            "separación entre géneros es limitada (§30), por lo que el género "
+            "dominante estimado puede no coincidir con el género real de la canción."
         )
 
 

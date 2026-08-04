@@ -47,6 +47,8 @@ models/**/*.pkl
 !models/preferences/v1/*.npy
 !models/classifier/multilabel/*_M1_A/model.joblib
 !models/classifier/multilabel/*_M1_A/scaler.joblib
+!models/classifier/multilabel/*_M1_B/model.joblib
+!models/classifier/multilabel/*_M1_B/scaler.joblib
 !models/classifier/multiclass/*_C1/model.joblib
 !models/classifier/multiclass/*_C1/scaler.joblib
 reports/figures/*

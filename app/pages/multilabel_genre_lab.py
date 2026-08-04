@@ -7,9 +7,11 @@ import streamlit as st
 from app.components import charts, filters, messages, resources
 from app.components.cards import seed_track_card
 from spotify_intelligence.classification.serving import (
+    load_validation_metrics,
     predict_multilabel_recording,
     select_recording_row,
 )
+from spotify_intelligence.data.contracts import DataContractError
 from spotify_intelligence.recommenders.catalog import genres_for_recording
 from spotify_intelligence.recommenders.errors import ArtifactNotFoundError
 
@@ -49,13 +51,17 @@ def render() -> None:
 
     try:
         serving = resources.load_multilabel_serving(model_key)
-    except ArtifactNotFoundError:
+    except (ArtifactNotFoundError, DataContractError, FileNotFoundError, OSError):
         messages.missing_artifact("Clasificador multietiqueta")
         return
 
     st.caption(
         f"Modelo {serving.model_id} · experimento {serving.experiment} · "
         f"umbral {serving.threshold:.2f}"
+    )
+    messages.render_validation_metrics(
+        load_validation_metrics("multilabel", model_key),
+        kind="multilabel",
     )
 
     true_genres = genres_for_recording(bridge, group)
@@ -91,6 +97,11 @@ def render() -> None:
 
         messages.info_note(
             "Las puntuaciones no están calibradas; no deben leerse como probabilidades (§16.10)."
+        )
+        messages.warn_note(
+            "Modelo experimental: con solo 18 características acústicas la "
+            "separación entre géneros es limitada (§30), por lo que las "
+            "predicciones pueden no coincidir con los géneros reales de la canción."
         )
 
 

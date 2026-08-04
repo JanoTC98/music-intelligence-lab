@@ -2,11 +2,45 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 import streamlit as st
 
 MISSING_ARTIFACT_HINT = (
     "El artefacto requerido no existe. Ejecute el script de construcción correspondiente."
 )
+
+
+def _format_decimal(value: float | None) -> str:
+    if value is None:
+        return "n/d"
+    return f"{value:.3f}".replace(".", ",")
+
+
+def render_validation_metrics(metrics: dict[str, Any] | None, *, kind: str) -> None:
+    """Render the saved validation quality of a classifier bundle (§18.5).
+
+    The numbers come from ``metrics_validation.json`` saved at training time and
+    help users calibrate trust: with only 18 acoustic features the models are
+    weak (§30). Validation metrics, never test metrics.
+    """
+    if not metrics:
+        return
+    if kind == "multilabel":
+        parts = (
+            f"macro-F1 {_format_decimal(metrics.get('macro_f1'))}",
+            f"hit@5 {_format_decimal(metrics.get('hit_at_5'))}",
+            f"LRAP {_format_decimal(metrics.get('lrap'))}",
+        )
+    elif kind == "multiclass":
+        parts = (
+            f"accuracy {_format_decimal(metrics.get('accuracy'))}",
+            f"balanced {_format_decimal(metrics.get('balanced_accuracy'))}",
+            f"top5 {_format_decimal(metrics.get('top5_accuracy'))}",
+        )
+    else:
+        return
+    st.caption("Calidad en validación (sin usar test): " + " · ".join(parts))
 
 
 def missing_artifact(kind: str) -> None:
