@@ -89,13 +89,7 @@ def render() -> None:
         display = tables.result_display_frame(results)
         st.markdown(f"### {len(results)} recomendaciones")
         st.dataframe(display, width="stretch")
-
-        export = results.drop(columns=["feature_differences"], errors="ignore").copy()
-        if "genres" in export.columns:
-            export["genres"] = export["genres"].map(
-                lambda value: ", ".join(value) if isinstance(value, (list, tuple)) else value
-            )
-        tables.download_csv_button(export, "recomendaciones_por_cancion.csv")
+        tables.download_csv_button(display, "recomendaciones_por_cancion.csv")
 
         with st.expander("Explicaciones por característica"):
             for position, row in results.iterrows():

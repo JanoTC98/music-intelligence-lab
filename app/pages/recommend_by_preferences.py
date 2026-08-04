@@ -100,13 +100,7 @@ def render() -> None:
         display = tables.result_display_frame(results)
         st.markdown(f"### {len(results)} recomendaciones")
         st.dataframe(display, width="stretch")
-
-        export = results.copy()
-        if "genres" in export.columns:
-            export["genres"] = export["genres"].map(
-                lambda value: ", ".join(value) if isinstance(value, (list, tuple)) else value
-            )
-        tables.download_csv_button(export, "recomendaciones_por_preferencias.csv")
+        tables.download_csv_button(display, "recomendaciones_por_preferencias.csv")
 
         messages.info_note(
             "La similitud se deriva de la distancia ponderada (§15.6); no es una "

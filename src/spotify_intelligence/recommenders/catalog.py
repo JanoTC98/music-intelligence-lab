@@ -55,10 +55,11 @@ def search_catalog(
 ) -> pd.DataFrame:
     """Return up to ``limit`` candidate rows matching ``query``.
 
-    Matching uses ``fuzz.token_sort_ratio`` against a combined label built from
-    track name, artists and album, so word order matters less than in an exact
-    lookup. Candidates are sorted by score (descending) with a stable tie-break
-    on ``track_id``.
+    Matching uses ``fuzz.token_set_ratio`` against a combined label built from
+    track name, artists and album, so a short title query finds its track even
+    when the full label carries many extra tokens (album, edition). Word order
+    and extra label tokens matter less than in ``token_sort_ratio``. Candidates
+    are sorted by score (descending) with a stable tie-break on ``track_id``.
 
     An empty or blank query returns an empty frame.
     """
@@ -73,7 +74,7 @@ def search_catalog(
     matches = process.extract(
         query_text,
         choices,
-        scorer=fuzz.token_sort_ratio,
+        scorer=fuzz.token_set_ratio,
         limit=limit,
         score_cutoff=SEARCH_SCORE_CUTOFF,
     )

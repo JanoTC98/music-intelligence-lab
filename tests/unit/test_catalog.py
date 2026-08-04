@@ -38,6 +38,12 @@ def make_tracks() -> pd.DataFrame:
                 "artists": "Imagine Dragons",
                 "album_name": "Night Visions",
             },
+            {
+                "track_id": "a8",
+                "track_name": "Stressed Out",
+                "artists": "Twenty One Pilots",
+                "album_name": "Blurryface",
+            },
         ]
     )
 
@@ -63,6 +69,14 @@ def test_track_name_query_keeps_fuzzy_ordering():
     result = search_catalog(make_tracks(), "thunder imagine")
     assert len(result) >= 1
     assert str(result.iloc[0]["track_name"]) == "Thunder"
+
+
+def test_short_title_query_finds_exact_song_first():
+    tracks = make_tracks()
+    result = search_catalog(tracks, "stressed out")
+    stressed = result[result["track_name"].astype(str).str.casefold().eq("stressed out")]
+    assert len(stressed) >= 1
+    assert result["track_id"].iloc[0] in set(stressed["track_id"])
 
 
 def test_blank_query_returns_empty():

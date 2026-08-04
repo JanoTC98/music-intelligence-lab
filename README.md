@@ -42,6 +42,7 @@ Proyecto end-to-end de ciencia de datos y machine learning que transforma un cat
 - Filtros desactivados por defecto (explícito, género, duración, artista, popularidad mínima).
 - Explicaciones por característica y diferencia de tempo en BPM.
 - Evaluación offline (§14.11) en `reports/metrics/track_recommender_evaluation.json/.csv` (muestra de 200 semillas: 0 autorrecomendaciones, 0 duplicados, 100 % cumplimiento de filtros).
+- Análisis de relevancia por género (§30, experimental) en `scripts/analyze_recommender_relevance.py`: el re-rank por afinidad de género sobre los 100 vecinos acústicos más cercanos triplica la coherencia de género del Top-10 (coherencia@10 media 0,163 → 0,602; mediana 0 → 0,65) con apenas −0,01 de similitud coseno; el ajuste de pesos por características no mejora (0,169). Resultado guardado en `reports/experiments/recommender_relevance_analysis.json`. La ganancia es variable por género: semillas de rock/alternativo (p. ej. Stressed Out) no mejoran porque su vecindario acústico no contiene el género.
 - Comparación R1–R4 en `reports/experiments/track_recommender_r1_r4_comparison.json`.
 - Notebook `notebooks/04_track_recommender_experiments.ipynb`.
 
@@ -158,6 +159,13 @@ Requisitos previos por página:
 | Recomendar por preferencias | `models/preferences/v1/` | `scripts/build_preference_recommender.py` |
 | Laboratorio multietiqueta | `models/classifier/multilabel/` | `scripts/train_multilabel_classifier.py` |
 | Laboratorio de género dominante | `models/classifier/multiclass/` | `scripts/train_multiclass_classifier.py` |
+
+## Despliegue
+
+Instrucciones para publicar en Streamlit Community Cloud (incluida la decisión de
+versionar los artefactos `data/processed/` y `models/`, ≈ 100 MB) en
+[`docs/deployment.md`](docs/deployment.md). La app pública opera con tracking
+deshabilitado (§18.6).
 
 ## Calidad
 

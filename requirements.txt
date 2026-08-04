@@ -77,6 +77,7 @@ numpy==2.5.1
     #   contourpy
     #   matplotlib
     #   pandas
+    #   pandas-stubs
     #   pydeck
     #   scikit-learn
     #   scipy
@@ -92,6 +93,8 @@ pandas==2.3.3
     # via
     #   spotify-music-intelligence
     #   streamlit
+pandas-stubs==2.3.3.260113
+    # via spotify-music-intelligence
 pillow==12.3.0
     # via
     #   matplotlib
@@ -158,6 +161,8 @@ threadpoolctl==3.6.0
     # via scikit-learn
 toml==0.10.2
     # via streamlit
+types-pytz==2026.3.1.20260727
+    # via pandas-stubs
 typing-extensions==4.16.0
     # via
     #   altair
