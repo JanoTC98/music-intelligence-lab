@@ -53,13 +53,12 @@ def build_tiny_recommender(artifact_dir: str | Path, catalog: pd.DataFrame | Non
         catalog = make_catalog_index(n=8)
     eligible = catalog[~catalog["audio_analysis_incomplete"]].reset_index(drop=True)
     matrix = eligible[FEATURES].to_numpy(dtype=float)
-    scaled = (matrix - matrix.mean(axis=0)) / matrix.std(axis=0)
+
+    scaler = StandardScaler()
+    scaled = scaler.fit_transform(matrix)
 
     neighbors = NearestNeighbors(n_neighbors=len(scaled), metric="cosine", algorithm="brute")
     neighbors.fit(scaled)
-
-    scaler = StandardScaler()
-    scaler.fit(matrix)
 
     joblib.dump(scaler, out / "scaler.joblib")
     joblib.dump(neighbors, out / "neighbors.joblib")
@@ -106,6 +105,21 @@ def make_same_work_catalog() -> pd.DataFrame:
     for feature in FEATURES:
         duplicate[feature] = duplicate[feature].astype(float) + 1e-4
     return pd.concat([catalog, duplicate], ignore_index=True)
+
+
+def make_affinity_catalog() -> pd.DataFrame:
+    """Catalog where genre-affinity re-ranking is observable.
+
+    All features except ``energy`` are constant (zero variance, handled by the
+    scaler), so energy alone drives the ordering. The nearest neighbor
+    (``g01``) is a different genre, while the next-closest candidates (``g02``,
+    ``g04``, ``g06``) share the seed genre ``genre0``.
+    """
+    catalog = make_catalog_index(n=8)
+    for feature in FEATURES:
+        catalog[feature] = 0.5
+    catalog["energy"] = [0.500, 0.501, 0.520, 0.600, 0.520, 0.900, 0.560, 0.700]
+    return catalog
 
 
 def build_tiny_preference_recommender(artifact_dir: str | Path) -> Path:

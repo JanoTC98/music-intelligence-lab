@@ -20,6 +20,17 @@ ARTIFACT_FILES = (
 )
 
 
+def _genre_set(value: object) -> set[str]:
+    """Convert a genres cell (list, tuple, np.ndarray or None) to a set."""
+    if value is None:
+        return set()
+    if isinstance(value, np.ndarray):
+        return {str(item) for item in value.tolist()}
+    if isinstance(value, (list, tuple)):
+        return {str(item) for item in value}
+    return set()
+
+
 @dataclass
 class RecommendationFilters:
     """User-configurable filters applied after the nearest-neighbor search.
@@ -101,11 +112,16 @@ class TrackRecommender:
         top_n: int = 10,
         filters: RecommendationFilters | None = None,
         include_explanations: bool = True,
+        genre_affinity: bool = False,
     ) -> pd.DataFrame:
         """Return a DataFrame with the Top-N recommendations for a seed recording.
 
         When ``include_explanations`` is True, a ``feature_differences`` column
         lists per-feature differences between the seed and each result (§14.9).
+
+        When ``genre_affinity`` is True, the retrieved candidates are re-ranked so
+        that recordings sharing at least one genre with the seed come first,
+        keeping similarity order within each group (§30 experimental variant).
         """
         filters = filters or RecommendationFilters()
         seed_row = self._seed_row_position(recording_group_id)
@@ -120,12 +136,34 @@ class TrackRecommender:
         results["distance"] = distances
         results["similarity"] = similarities
         results = self._deduplicate_groups(results)
-        results = results.sort_values(["similarity", "recording_group_id"], ascending=[False, True])
+        if genre_affinity:
+            results = self._reorder_with_affinity(results, seed_row)
+        else:
+            results = results.sort_values(
+                ["similarity", "recording_group_id"], ascending=[False, True]
+            )
         results = results.head(top_n).reset_index(drop=True)
 
         if include_explanations:
             results["feature_differences"] = self._explain_row(seed_row, results)
         return results
+
+    def _reorder_with_affinity(
+        self,
+        results: pd.DataFrame,
+        seed_row: int,
+    ) -> pd.DataFrame:
+        """Re-rank a candidate set so shared-genre recordings come first (§30)."""
+        seed_genres = _genre_set(self.catalog_index.iloc[seed_row].get("genres"))
+        results = results.copy()
+        results["_shares_genre"] = results["genres"].map(
+            lambda genres: bool(_genre_set(genres) & seed_genres)
+        )
+        results = results.sort_values(
+            ["_shares_genre", "similarity", "recording_group_id"],
+            ascending=[False, False, True],
+        )
+        return results.drop(columns=["_shares_genre"])
 
     def _explain_row(
         self,

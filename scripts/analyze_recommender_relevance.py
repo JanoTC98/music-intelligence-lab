@@ -83,16 +83,20 @@ def _coherence(seed_genres: set[str], candidate_genres: list[set[str]]) -> float
     return hits / len(candidate_genres)
 
 
-def _top_coherence_and_cos(
+def _weighted_metrics(
     matrix: np.ndarray,
     unit: np.ndarray,
     seed_row: int,
     w: np.ndarray,
     genres: list[set[str]],
     mask: np.ndarray,
+    artists: pd.Series,
     top_n: int = TOP_N,
-) -> tuple[float, float]:
-    """Weighted distance ranking; returns (coherence@top_n, mean cosine)."""
+) -> tuple[float, float, float, float]:
+    """Weighted distance ranking.
+
+    Returns ``(coherence@top_n, mean_cosine, internal_std, artists_prop)``.
+    """
     query = matrix[seed_row]
     diff = matrix - query
     dist = np.sqrt((diff**2 * w).sum(axis=1) / w.sum())
@@ -100,22 +104,28 @@ def _top_coherence_and_cos(
     order = np.argsort(dist)[: top_n + 1]
     order = order[~mask[order]][:top_n]
     cos = (unit[order] * unit[seed_row]).sum(axis=1)
-    return _coherence(genres[seed_row], [genres[i] for i in order]), float(cos.mean())
+    return (
+        _coherence(genres[seed_row], [genres[i] for i in order]),
+        float(cos.mean()),
+        float(cos.std()),
+        float(artists.iloc[order].nunique() / len(order)),
+    )
 
 
-def _affinity_top(
+def _affinity_metrics(
     unit: np.ndarray,
     seed_row: int,
     genres: list[set[str]],
     mask: np.ndarray,
+    artists: pd.Series,
     top_n: int = TOP_N,
     neighbor_floor: int = NEIGHBOR_FLOOR,
-) -> tuple[float, float, float]:
+) -> tuple[float, float, float, float, float]:
     """Affinity re-rank over the acoustic neighborhood.
 
-    Returns ``(coherence@top_n, mean_cosine, availability)``. Availability is
-    the fraction of neighbors sharing a genre with the seed; when it is 0.0 the
-    re-rank cannot improve genre coherence.
+    Returns ``(coherence@top_n, mean_cosine, internal_std, artists_prop,
+    availability)``. Availability is the fraction of neighbors sharing a genre
+    with the seed; when it is 0.0 the re-rank cannot improve genre coherence.
     """
     query = unit[seed_row]
     cos = (unit * query).sum(axis=1)
@@ -123,8 +133,13 @@ def _affinity_top(
     neighbors = np.argsort(cos)[::-1][:neighbor_floor]
     affinity = np.array([bool(genres[i] & genres[seed_row]) for i in neighbors], dtype=float)
     order = neighbors[np.lexsort((cos[neighbors], affinity))[::-1]][:top_n]
-    coherence = _coherence(genres[seed_row], [genres[i] for i in order])
-    return coherence, float(cos[order].mean()), float(affinity.mean())
+    return (
+        _coherence(genres[seed_row], [genres[i] for i in order]),
+        float(cos[order].mean()),
+        float(cos[order].std()),
+        float(artists.iloc[order].nunique() / len(order)),
+        float(affinity.mean()),
+    )
 
 
 def _distribution(values: list[float]) -> dict[str, float]:
@@ -136,6 +151,30 @@ def _distribution(values: list[float]) -> dict[str, float]:
         "p75": float(np.percentile(array, 75)),
         "share_ge_0_5": float((array >= 0.5).mean()),
     }
+
+
+def _variant_report(
+    coh: list[float],
+    cos: list[float],
+    cos_std: list[float],
+    artists: list[float],
+    availability: list[float] | None = None,
+) -> dict[str, object]:
+    """Metrics block for one ranking variant.
+
+    ``internal_diversity_similarity_std`` and ``unique_artists_per_list`` follow
+    the official evaluation methodology (mean of per-list std and of per-list
+    unique-artist proportion, §14.11).
+    """
+    block: dict[str, object] = {
+        "genre_coherence_at_10": _distribution(coh),
+        "mean_cosine_similarity": float(np.mean(cos)),
+        "internal_diversity_similarity_std": _distribution(cos_std),
+        "unique_artists_per_list": _distribution(artists),
+    }
+    if availability is not None:
+        block["availability_in_top100"] = float(np.mean(availability))
+    return block
 
 
 def main() -> None:
@@ -174,6 +213,12 @@ def main() -> None:
     baseline_cos: list[float] = []
     weighted_cos: list[float] = []
     affinity_cos: list[float] = []
+    baseline_cos_std: list[float] = []
+    weighted_cos_std: list[float] = []
+    affinity_cos_std: list[float] = []
+    baseline_artists: list[float] = []
+    weighted_artists: list[float] = []
+    affinity_artists: list[float] = []
     availability: list[float] = []
 
     per_genre: dict[str, dict[str, list[float]]] = {}
@@ -193,16 +238,25 @@ def main() -> None:
         baseline_genres = [_to_genre_set(value) for value in result["genres"]]
         b_coh = _coherence(seed_genres, baseline_genres)
         baseline_coh.append(b_coh)
-        result_rows = [int(rec._group_to_row[g]) for g in result["recording_group_id"]]
-        baseline_cos.append(float((unit[result_rows] * unit[seed_row]).sum(axis=1).mean()))
+        baseline_cos.append(float(result["similarity"].mean()))
+        baseline_cos_std.append(float(result["similarity"].std()))
+        baseline_artists.append(float(result["artists"].nunique() / len(result)))
 
-        w_coh, w_cos = _top_coherence_and_cos(matrix, unit, seed_row, w, genre_rows, mask)
+        w_coh, w_cos, w_std, w_art = _weighted_metrics(
+            matrix, unit, seed_row, w, genre_rows, mask, artists
+        )
         weighted_coh.append(w_coh)
         weighted_cos.append(w_cos)
+        weighted_cos_std.append(w_std)
+        weighted_artists.append(w_art)
 
-        a_coh, a_cos, avail = _affinity_top(unit, seed_row, genre_rows, mask)
+        a_coh, a_cos, a_std, a_art, avail = _affinity_metrics(
+            unit, seed_row, genre_rows, mask, artists
+        )
         affinity_coh.append(a_coh)
         affinity_cos.append(a_cos)
+        affinity_cos_std.append(a_std)
+        affinity_artists.append(a_art)
         availability.append(avail)
 
         for genre in seed_genres:
@@ -244,19 +298,15 @@ def main() -> None:
         "top_n": TOP_N,
         "experiment_weights": EXPERIMENT_WEIGHTS,
         "metrics": {
-            "baseline": {
-                "genre_coherence_at_10": _distribution(baseline_coh),
-                "mean_cosine_similarity": float(np.mean(baseline_cos)),
-            },
-            "weighted": {
-                "genre_coherence_at_10": _distribution(weighted_coh),
-                "mean_cosine_similarity": float(np.mean(weighted_cos)),
-            },
-            "genre_affinity": {
-                "genre_coherence_at_10": _distribution(affinity_coh),
-                "mean_cosine_similarity": float(np.mean(affinity_cos)),
-                "availability_in_top100": float(np.mean(availability)),
-            },
+            "baseline": _variant_report(
+                baseline_coh, baseline_cos, baseline_cos_std, baseline_artists
+            ),
+            "weighted": _variant_report(
+                weighted_coh, weighted_cos, weighted_cos_std, weighted_artists
+            ),
+            "genre_affinity": _variant_report(
+                affinity_coh, affinity_cos, affinity_cos_std, affinity_artists, availability
+            ),
         },
         "per_genre": per_genre_summary,
         "unrecoverable_genres": unrecoverable,

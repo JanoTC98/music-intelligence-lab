@@ -34,6 +34,9 @@ track_recommender:
   exclusions:
     audio_analysis_incomplete: true
     same_recording_group: true
+  genre_affinity:
+    enabled_default: false
+    neighbor_floor: 100
   filters:
     explicit_default: "all"
     genre_default: "all"

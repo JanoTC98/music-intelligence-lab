@@ -76,11 +76,21 @@ def render() -> None:
         recommender_config, genres, prefix="track"
     )
 
+    affinity_config = recommender_config["track_recommender"].get("genre_affinity", {})
+    genre_affinity = st.toggle(
+        "Priorizar canciones del mismo género de la semilla",
+        value=bool(affinity_config.get("enabled_default", False)),
+        help="Reordena los candidatos acústicamente más cercanos para que "
+        "compartan género con la semilla (variante experimental §30).",
+        key="track_genre_affinity",
+    )
+
     if st.button("Recomendar", type="primary", key="track_run"):
         results = recommender.recommend(
             seed_group,
             top_n=top_n,
             filters=recommendation_filters,
+            genre_affinity=genre_affinity,
         )
         if results.empty:
             messages.empty_state("No hay resultados con los filtros seleccionados.")

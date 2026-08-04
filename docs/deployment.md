@@ -59,6 +59,8 @@ límite de 100 MB por archivo de GitHub.
 
 - Página *Inicio* carga sin errores.
 - *Recomendar por canción*: buscar una canción, seleccionarla y obtener el Top-N.
+  La página incluye el toggle experimental *"Priorizar canciones del mismo género de
+  la semilla"* (afinidad de género, §30), desactivado por defecto.
 - *Recomendar por preferencias*: un preset produce resultados.
 - *Laboratorios de género*: muestran puntuaciones de los modelos versionados.
 - *Auditoría y catálogo*: muestra el reporte `data_quality_report.json`.

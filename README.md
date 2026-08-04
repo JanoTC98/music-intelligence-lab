@@ -42,7 +42,16 @@ Proyecto end-to-end de ciencia de datos y machine learning que transforma un cat
 - Filtros desactivados por defecto (explícito, género, duración, artista, popularidad mínima).
 - Explicaciones por característica y diferencia de tempo en BPM.
 - Evaluación offline (§14.11) en `reports/metrics/track_recommender_evaluation.json/.csv` (muestra de 200 semillas: 0 autorrecomendaciones, 0 duplicados, 100 % cumplimiento de filtros).
-- Análisis de relevancia por género (§30, experimental) en `scripts/analyze_recommender_relevance.py`: el re-rank por afinidad de género sobre los 100 vecinos acústicos más cercanos triplica la coherencia de género del Top-10 (coherencia@10 media 0,163 → 0,602; mediana 0 → 0,65) con apenas −0,01 de similitud coseno; el ajuste de pesos por características no mejora (0,169). Resultado guardado en `reports/experiments/recommender_relevance_analysis.json`. La ganancia es variable por género: semillas de rock/alternativo (p. ej. Stressed Out) no mejoran porque su vecindario acústico no contiene el género.
+- Variante experimental de **afinidad de género** (§30) como toggle desactivado por defecto en la app (botón "Priorizar canciones del mismo género de la semilla"); reordena el pool acústico recuperado para que los candidatos que comparten género con la semilla salgan primero, sin añadir candidatos fuera del pool.
+- Análisis de relevancia (§30, `scripts/analyze_recommender_relevance.py`, 2000 semillas) en `reports/experiments/recommender_relevance_analysis.json` — evaluado con las métricas oficiales (§14.11):
+
+  | Variante | Coherencia@10 media | Coseno medio | Diversidad interna (std) | Artistas únicos por lista |
+  |---|---|---:|---:|---:|
+  | Baseline | 0,131 | 0,9705 | 0,0065 | 0,948 |
+  | Pesos ajustados | 0,131 | 0,9607 | 0,0140 | 0,950 |
+  | Afinidad de género | **0,552** | 0,9605 | 0,0131 | 0,906 |
+
+  La afinidad cuadruplica la coherencia de género con −0,01 de similitud, casi sin perder variedad de artistas y duplicando la diversidad interna de puntuaciones; los pesos por característica no mejoran nada. La ganancia es variable por género (disponibilidad media del género en los 100 vecinos acústicos: 0,11); rock/alternativo mejoran menos (rock 0,06 → 0,41).
 - Comparación R1–R4 en `reports/experiments/track_recommender_r1_r4_comparison.json`.
 - Notebook `notebooks/04_track_recommender_experiments.ipynb`.
 

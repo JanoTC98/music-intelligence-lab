@@ -7,6 +7,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "fixtures"))
 
 from recommender_helpers import (  # noqa: E402
     build_tiny_recommender,
+    make_affinity_catalog,
     make_same_work_catalog,
 )
 
@@ -27,6 +28,14 @@ def recommender(tmp_path):
 def recommender_same_work(tmp_path):
     artifact_dir = build_tiny_recommender(
         tmp_path / "artifacts_dup", catalog=make_same_work_catalog()
+    )
+    return TrackRecommender(artifact_dir)
+
+
+@pytest.fixture()
+def recommender_affinity(tmp_path):
+    artifact_dir = build_tiny_recommender(
+        tmp_path / "artifacts_affinity", catalog=make_affinity_catalog()
     )
     return TrackRecommender(artifact_dir)
 
@@ -192,4 +201,43 @@ def test_stable_order_on_ties(recommender):
     group_id = recommender.catalog_index.iloc[0]["recording_group_id"]
     first = recommender.recommend(group_id, top_n=5)
     second = recommender.recommend(group_id, top_n=5)
+    assert list(first["recording_group_id"]) == list(second["recording_group_id"])
+
+
+def test_genre_affinity_disabled_keeps_similarity_order(recommender_affinity):
+    group_id = recommender_affinity.catalog_index.iloc[0]["recording_group_id"]
+    results = recommender_affinity.recommend(group_id, top_n=3, genre_affinity=False)
+    assert results["recording_group_id"].tolist() == ["g01", "g02", "g04"]
+    assert list(results["genres"].iloc[0]) == ["genre1"]
+
+
+def test_genre_affinity_ranks_shared_genre_first(recommender_affinity):
+    group_id = recommender_affinity.catalog_index.iloc[0]["recording_group_id"]
+    results = recommender_affinity.recommend(group_id, top_n=3, genre_affinity=True)
+    assert results["recording_group_id"].tolist() == ["g02", "g04", "g06"]
+    for genres in results["genres"]:
+        assert set(genres) == {"genre0"}
+
+
+def test_genre_affinity_top_n_extended(recommender_affinity):
+    group_id = recommender_affinity.catalog_index.iloc[0]["recording_group_id"]
+    results = recommender_affinity.recommend(group_id, top_n=4, genre_affinity=True)
+    assert results["recording_group_id"].tolist() == ["g02", "g04", "g06", "g01"]
+
+
+def test_genre_affinity_keeps_pool_and_excludes_seed(recommender_affinity):
+    catalog = recommender_affinity.catalog_index
+    seed = catalog.iloc[0]
+    pool = set(catalog["recording_group_id"]) - {seed["recording_group_id"]}
+    results = recommender_affinity.recommend(
+        seed["recording_group_id"], top_n=6, genre_affinity=True
+    )
+    assert set(results["recording_group_id"]) <= pool
+    assert seed["recording_group_id"] not in set(results["recording_group_id"])
+
+
+def test_genre_affinity_stable_across_calls(recommender_affinity):
+    group_id = recommender_affinity.catalog_index.iloc[0]["recording_group_id"]
+    first = recommender_affinity.recommend(group_id, top_n=4, genre_affinity=True)
+    second = recommender_affinity.recommend(group_id, top_n=4, genre_affinity=True)
     assert list(first["recording_group_id"]) == list(second["recording_group_id"])
