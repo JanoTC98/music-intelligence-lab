@@ -13,31 +13,33 @@
 
 ## 2. Artefactos necesarios y decisión de versionado
 
-La aplicación necesita dos grupos de archivos que **no se versionan por defecto**
-(§26.4):
+**Decisión tomada: Opción A — versionar artefactos** (§26.4, aprobada por el
+propietario). Se versionan los datos procesados y los artefactos de producción
+que la aplicación carga; los experimentos de clasificación y el CSV crudo
+permanecen fuera de Git.
 
-| Grupo | Ruta | Tamaño actual | Archivo mayor |
+La aplicación necesita dos grupos de archivos que **no se versionaban por
+defecto** y que la Opción A des-ignora en `.gitignore`:
+
+| Grupo | Ruta | Tamaño versionado | Archivo mayor |
 |---|---|---|---|
-| Datos procesados | `data/processed/` | ≈ 58 MB | `tracks.parquet` (16,1 MB) |
-| Recomendador por canción | `models/recommender/v1/` | ≈ 23,8 MB | `catalog_index.parquet` (12,3 MB) |
-| Recomendador por preferencias | `models/preferences/v1/` | ≈ 15,6 MB | `catalog_index.parquet` (11,8 MB) |
-| Clasificadores | `models/classifier/` | ≈ 1,3 MB | < 1 MB |
+| Datos procesados | `data/processed/` | 58 MB (9 parquet + 2 JSON) | `tracks.parquet` (16,1 MB) |
+| Recomendador por canción | `models/recommender/v1/` | 23,8 MB (nuevo: 11,8 MB) | `catalog_index.parquet` (12,3 MB) |
+| Recomendador por preferencias | `models/preferences/v1/` | 15,6 MB (nuevo: 3,9 MB) | `catalog_index.parquet` (11,8 MB) |
+| Clasificadores (serving) | `models/classifier/` (M1_A y C1) | 0,1 MB (nuevo) | < 1 MB |
 
-Total ≈ **100 MB**. Todos los archivos individuales están muy por debajo del
-límite de 100 MB por archivo de GitHub.
+Total añadido ≈ **74 MB**. Todos los archivos individuales están muy por debajo
+del límite de 100 MB por archivo de GitHub.
 
-### Opciones
+Notas:
 
-- **Opción A (recomendada para V1): versionar artefactos.** Quitar
-  `data/processed/*` y `models/**/*.joblib`/`.npy` de `.gitignore` y subirlos al
-  repositorio. Community Cloud clona el repo y la app funciona directamente.
-  **Decisión del propietario** (§26.4): implica añadir ≈ 100 MB al repositorio y
-  requiere revisar la licencia de los datos derivados.
-- **Opción B: no versionar nada.** La app arranca, pero cada página muestra
-  *"El artefacto requerido no existe"*. No es apta para un MVP real.
-- **Opción C: artefactos externos.** Guardar los archivos en un release asset o
-  almacenamiento de objetos y descargarlos al arranque. Más compleja; se descarta
-  para V1.
+- `data/raw/dataset.csv` **no** se versiona; solo viajan los parquet derivados.
+  Los datos derivados se publican bajo la licencia del dataset fuente (CC
+  BY-NC-SA 4.0 en la versión habitual, ver `data/README.md`).
+- Los joblibs de experimentos de clasificación (M0, M2, variante B, C0) no se
+  cargan en la aplicación y permanecen ignorados.
+- Opciones descartadas: **B** (sin artefactos, la app no funciona) y **C**
+  (artefactos externos, complejidad innecesaria para V1).
 
 ## 3. Pasos en Streamlit Community Cloud
 
@@ -45,7 +47,7 @@ límite de 100 MB por archivo de GitHub.
 2. Entrar en <https://share.streamlit.io> y crear una nueva app conectada al
    repositorio.
 3. Configurar:
-   - **Repository**: `spotify-music-intelligence`.
+   - **Repository**: `JanoTC98/music-intelligence-lab`.
    - **Branch**: `main`.
    - **Main file path**: `streamlit_app.py`.
    - **Python version**: 3.12.

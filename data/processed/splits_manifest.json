@@ -1,0 +1,13 @@
+{
+  "split_sha256": "7cdb3f42c405725ff341667b7ab27d9e928bd82605f599425f11857008d39b67",
+  "train_count": 58716,
+  "validation_count": 12582,
+  "test_count": 12583,
+  "total_count": 83881,
+  "config_sha256": "d2bf06e5d49ff94f1342abe9fc232b24755aa9fc758570c10c03a2228983afeb",
+  "dataset_sha256": "b202fa49909b2d5cef71a04b1d21243cfeb36414535f2ca9272aa646721177bd",
+  "random_state": 42,
+  "candidate_split_count": 50,
+  "freeze_test": true,
+  "git_commit": "612a952349ca9a1b9f8c1d7f6c8a8e0662a04a2d"
+}

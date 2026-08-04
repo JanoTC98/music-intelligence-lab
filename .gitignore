@@ -31,12 +31,24 @@ data/interim/*
 !data/interim/.gitkeep
 data/processed/*
 !data/processed/.gitkeep
+!data/processed/*.parquet
+!data/processed/*.json
 
 # Models and generated reports
 models/**/*.joblib
 models/**/*.npy
 models/**/*.npz
 models/**/*.pkl
+# Production artifacts versioned for deployment (AGENTS.md §27, Opción A).
+# Retraining keeps timestamps; globs match the serving bundle regardless.
+!models/recommender/v1/*.joblib
+!models/recommender/v1/*.npy
+!models/preferences/v1/*.joblib
+!models/preferences/v1/*.npy
+!models/classifier/multilabel/*_M1_A/model.joblib
+!models/classifier/multilabel/*_M1_A/scaler.joblib
+!models/classifier/multiclass/*_C1/model.joblib
+!models/classifier/multiclass/*_C1/scaler.joblib
 reports/figures/*
 reports/experiments/*
 
