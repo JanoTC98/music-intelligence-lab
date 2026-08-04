@@ -1,4 +1,4 @@
-"""Streamlit import smoke tests (AGENTS.md §25.7).
+"""Streamlit import smoke tests (AGENTS.md sección 25.7).
 
 The router and every page are importable without a running Streamlit runtime,
 perform no widget calls and never trigger training at import time.
@@ -74,7 +74,7 @@ def test_importing_pages_does_not_render() -> None:
 
 
 def test_resources_are_cached() -> None:
-    """Resource loaders expose the Streamlit cache wrappers (§18.2)."""
+    """Resource loaders expose the Streamlit cache wrappers (sección 18.2)."""
     resources = importlib.import_module("app.components.resources")
     for loader_name in (
         "load_tracks",

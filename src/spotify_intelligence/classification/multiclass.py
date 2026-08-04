@@ -1,10 +1,10 @@
-"""Multiclass (dominant genre) classification models (AGENTS.md §17).
+"""Multiclass (dominant genre) classification models (AGENTS.md sección 17).
 
 Predicts a single dominant genre from the primary audio features. The target
 ``y`` is the genre index into the canonical 114-genre encoder; scikit-learn
 models learn a dense ``classes_`` subset (only the classes present in train).
 
-Scores are uncalibrated; they are never called probabilities (§16.10).
+Scores are uncalibrated; they are never called probabilities (sección 16.10).
 """
 
 from __future__ import annotations

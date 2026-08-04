@@ -39,7 +39,7 @@ def render_recommendation_filters(
     prefix: str = "filters",
     include_different_artist: bool = True,
 ) -> RecommendationFilters:
-    """Render optional recommendation filters (AGENTS.md §14.8).
+    """Render optional recommendation filters (AGENTS.md sección 14.8).
 
     Every filter is inactive by default; the widget state always matches the
     approved configuration values from ``recommender_features.yaml``. The
@@ -110,7 +110,7 @@ def render_preference_profile(
     *,
     prefix: str = "profile",
 ) -> PreferenceProfile:
-    """Render preset + editable sliders and weights (§15.2/§15.5).
+    """Render preset + editable sliders and weights (sección 15.2/sección 15.5).
 
     The returned profile always validates: at least one weight is non-zero and
     every value stays inside its approved range.
@@ -126,12 +126,18 @@ def render_preference_profile(
     )
     selected = presets[preset_key]
 
+    generation_key = f"{prefix}_generation"
     last_preset_key = f"{prefix}_last_preset"
     if st.session_state.get(last_preset_key) != preset_key:
-        for feature in BASIC_FEATURES:
-            st.session_state.pop(f"{prefix}_value_{feature}", None)
-            st.session_state.pop(f"{prefix}_weight_{feature}", None)
+        st.session_state[generation_key] = int(st.session_state.get(generation_key, 0)) + 1
         st.session_state[last_preset_key] = preset_key
+    generation = int(st.session_state.get(generation_key, 0))
+
+    def value_key(feature: str) -> str:
+        return f"{prefix}_value_{feature}_{generation}"
+
+    def weight_key(feature: str) -> str:
+        return f"{prefix}_weight_{feature}_{generation}"
 
     with st.expander("Editar valores", expanded=True):
         values: dict[str, float] = {}
@@ -144,7 +150,7 @@ def render_preference_profile(
                 max_value=float(high),
                 value=float(selected["values"][feature]),
                 step=float(step),
-                key=f"{prefix}_value_{feature}",
+                key=value_key(feature),
             )
 
     with st.expander("Pesos (0 = ignorar, 3 = alta importancia)", expanded=True):
@@ -154,7 +160,7 @@ def render_preference_profile(
                 f"Peso · {FEATURE_LABELS.get(feature, feature)}",
                 options=[0, 1, 2, 3],
                 index=int(selected["weights"].get(feature, DEFAULT_WEIGHTS[feature])),
-                key=f"{prefix}_weight_{feature}",
+                key=weight_key(feature),
             )
 
     return PreferenceProfile.from_manual(values, weights, label=preset_labels.get(preset_key))
@@ -169,7 +175,7 @@ def render_track_search(
     """Render a disambiguated track search and return the selected row.
 
     Returns ``None`` while no query has produced a confirmed selection. The
-    caller decides what to render next (AGENTS.md §18.5 "búsqueda
+    caller decides what to render next (AGENTS.md sección 18.5 "búsqueda
     desambiguada por canción y artista").
     """
     query = st.text_input(label, key=f"{prefix}_query")

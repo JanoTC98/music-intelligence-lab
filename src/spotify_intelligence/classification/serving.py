@@ -1,9 +1,9 @@
-"""Artifact loading and single-recording inference for the app (AGENTS.md §18).
+"""Artifact loading and single-recording inference for the app (AGENTS.md sección 18).
 
-The Streamlit pages must never fit or train models (§18.4). This module loads
+The Streamlit pages must never fit or train models (sección 18.4). This module loads
 the versioned classifier artifacts produced by the training scripts and applies
 them to a single ``recording_group_id`` using the exact same feature recipe as
-training (§16.3, §25.5 "misma transformación en entrenamiento e inferencia").
+training (sección 16.3, sección 25.5 "misma transformación en entrenamiento e inferencia").
 
 The feature row replicates ``classification.training.feature_matrix`` for one
 row:
@@ -11,7 +11,7 @@ row:
 - experiment A: primary features (minus ``time_signature``) + fixed one-hot of
   ``time_signature`` -> 18 columns.
 - experiment B: same as A plus the incomplete-audio indicator -> 19 columns,
-  with incomplete rows imputed using train-only medians (§16.5B).
+  with incomplete rows imputed using train-only medians (sección 16.5B).
 """
 
 from __future__ import annotations
@@ -117,7 +117,7 @@ def _require_artifact_file(artifact_dir: Path, filename: str) -> Path:
 
     A bundle directory can exist (e.g. manifests tracked in git) while a
     joblib is missing on disk. Raising a typed error instead of a raw
-    ``FileNotFoundError`` lets the app render §18.4 messaging.
+    ``FileNotFoundError`` lets the app render sección 18.4 messaging.
     """
     path = artifact_dir / filename
     if not path.exists():
@@ -130,7 +130,7 @@ def load_validation_metrics(
     model_key: str,
     models_dir: str | Path = MODELS_DIR,
 ) -> dict[str, Any] | None:
-    """Return the saved validation metrics for a serving bundle (§18.5)."""
+    """Return the saved validation metrics for a serving bundle (sección 18.5)."""
     import json
 
     artifact_dir = _find_artifact_dir(kind, model_key, models_dir)
@@ -224,7 +224,7 @@ def select_recording_row(
 def imputation_values_from_train(
     processed_dir: str | Path = "data/processed",
 ) -> dict[str, float]:
-    """Return train-only medians for the incomplete-audio pattern (§16.5B).
+    """Return train-only medians for the incomplete-audio pattern (sección 16.5B).
 
     Mirrors ``classification.training.train_imputation_values`` but reads the
     processed recordings directly so the app does not build the full dataset.
@@ -336,8 +336,8 @@ def predict_multiclass_recording(
 ) -> dict[str, Any]:
     """Run the dominant-genre model on one recording and return Top-k output.
 
-    The dense model scores are expanded to the full 114-label space (§17.3)
-    and ranked; the scores remain uncalibrated (§16.10).
+    The dense model scores are expanded to the full 114-label space (sección 17.3)
+    and ranked; the scores remain uncalibrated (sección 16.10).
     """
     row = build_recording_feature_row(recordings_row, experiment="A")
     scaled = serving.scaler.transform(row)

@@ -15,7 +15,7 @@ def test_compute_file_hash():
 
 
 def test_raw_dataset_hash_regression():
-    """The raw dataset is immutable (§12); its SHA-256 is a regression anchor."""
+    """The raw dataset is immutable (sección 12); its SHA-256 is a regression anchor."""
     expected = "b202fa49909b2d5cef71a04b1d21243cfeb36414535f2ca9272aa646721177bd"
     assert compute_file_hash("data/raw/dataset.csv") == expected
 

@@ -15,7 +15,7 @@ BASIC_FEATURES: tuple[str, ...] = (
     "tempo",
 )
 
-# Ranges applied to preset values during validation (AGENTS.md §15.3).
+# Ranges applied to preset values during validation (AGENTS.md sección 15.3).
 VALUE_RANGES: dict[str, tuple[float, float]] = {
     "energy": (0.0, 1.0),
     "danceability": (0.0, 1.0),

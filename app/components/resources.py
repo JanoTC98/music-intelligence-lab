@@ -1,8 +1,8 @@
-"""Cached resource loaders for the Streamlit app (AGENTS.md §18.2).
+"""Cached resource loaders for the Streamlit app (AGENTS.md sección 18.2).
 
 Data tables use ``st.cache_data``; model instances, scalers and indices use
 ``st.cache_resource``. The app never trains or fits anything at runtime
-(§18.4); missing artifacts surface as exceptions that pages convert into
+(sección 18.4); missing artifacts surface as exceptions that pages convert into
 user-facing messages.
 """
 

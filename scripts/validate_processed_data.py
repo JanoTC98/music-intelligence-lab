@@ -1,4 +1,4 @@
-"""Validate the processed data artifacts (AGENTS.md §25.1, §9).
+"""Validate the processed data artifacts (AGENTS.md sección 25.1, sección 9).
 
 Checks the contracts of the generated Parquet tables without modifying them.
 Exits with a non-zero status and a clear message on the first failure.

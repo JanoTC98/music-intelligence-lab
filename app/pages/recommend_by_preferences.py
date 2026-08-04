@@ -1,4 +1,4 @@
-"""Preference recommendation page (AGENTS.md §15)."""
+"""Preference recommendation page (AGENTS.md sección 15)."""
 
 from __future__ import annotations
 
@@ -20,7 +20,7 @@ def render() -> None:
     st.title("Recomendar por preferencias")
     st.caption(
         "Encuentra canciones cercanas a un perfil acústico ponderado, "
-        "partiendo de un preset editable o de un perfil manual (§15)."
+        "partiendo de un preset editable o de un perfil manual (sección 15)."
     )
 
     genres = resources.load_genre_catalog()
@@ -103,7 +103,7 @@ def render() -> None:
         tables.download_csv_button(display, "recomendaciones_por_preferencias.csv")
 
         messages.info_note(
-            "La similitud se deriva de la distancia ponderada (§15.6); no es una "
+            "La similitud se deriva de la distancia ponderada (sección 15.6); no es una "
             "probabilidad de gusto."
         )
 

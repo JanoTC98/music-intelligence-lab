@@ -2,7 +2,7 @@
 
 - ``GenreLabelEncoder`` maps the 114 genre names to a stable binary vector.
   The order follows ``genre_catalog.parquet`` (genre_id order), which is the
-  versioned authority for label ordering (§25.3 "las etiquetas mantienen orden
+  versioned authority for label ordering (sección 25.3 "las etiquetas mantienen orden
   estable").
 - ``TimeSignatureOneHot`` one-hot encodes ``time_signature`` using categories
   learned at fit time (train only) and ignores unseen categories at transform.

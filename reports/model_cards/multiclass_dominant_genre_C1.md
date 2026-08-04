@@ -1,7 +1,7 @@
 # Model Card · C1 · Género acústico dominante (multiclase)
 
 **Proyecto:** Spotify Music Intelligence
-**Módulo 7:** Clasificador multiclase secundario (AGENTS.md §17)
+**Módulo 7:** Clasificador multiclase secundario (AGENTS.md sección 17)
 **Experiment id:** `20260803-1619_multiclass_C1`
 **Artefacto:** `models/classifier/multiclass/20260803-1619_multiclass_C1/`
 **Modelo:** Logistic Regression (multiclass `lbfgs`)
@@ -13,16 +13,16 @@
 
 Estimar un **género acústico dominante** entre 114 clases a partir de
 características acústicas, sobre el subconjunto de grabaciones con una sola
-etiqueta original (§17.1, §17.2).
+etiqueta original (sección 17.1, sección 17.2).
 
 > La predicción es exploratoria y **no reemplaza** las etiquetas originales de
-> canciones multigénero (§17.5).
+> canciones multigénero (sección 17.5).
 
 ## 2. Datos
 
 - Unidad: `recording_group_id`.
-- Población: 69.943 grabaciones monoetiqueta (§17.1).
-- Splits agrupados congelados (§16.4): train **48.987** / validación **10.496** / test **10.460**.
+- Población: 69.943 grabaciones monoetiqueta (sección 17.1).
+- Splits agrupados congelados (sección 16.4): train **48.987** / validación **10.496** / test **10.460**.
 - Clases en train: **112 de 114**; conteos por clase 47–717 (desbalance ~15×).
 - `split_sha256`: `7cdb3f42c405725ff341667b7ab27d9e928bd82605f599425f11857008d39b67`
 - `dataset_sha256`: `b202fa49909b2d5cef71a04b1d21243cfeb36414535f2ca9272aa646721177bd`
@@ -31,14 +31,14 @@ etiqueta original (§17.1, §17.2).
 
 `danceability, energy, loudness, speechiness, acousticness, instrumentalness,
 liveness, valence, tempo, log_duration, key_sin, key_cos, mode` +
-`time_signature` one-hot (§16.3, §32.4).
+`time_signature` one-hot (sección 16.3, sección 32.4).
 
 - Escalado: `StandardScaler` ajustado **solo en train**.
-- Experiment: A (excluye `audio_analysis_incomplete`, §16.5).
+- Experiment: A (excluye `audio_analysis_incomplete`, sección 16.5).
 - Prohibidas: `track_id`, `recording_group_id`, `track_name`, `artists`,
-  `album_name`, `track_genre` (§16.3).
+  `album_name`, `track_genre` (sección 16.3).
 
-## 4. Configuración (§17.3, §32.5)
+## 4. Configuración (sección 17.3, sección 32.5)
 
 ```yaml
 solver: lbfgs
@@ -50,7 +50,7 @@ random_state: 42
 
 Convergencia: OK con datos escalados (sin `ConvergenceWarning`).
 
-## 5. Métricas sobre validación (§17.4)
+## 5. Métricas sobre validación (sección 17.4)
 
 | Métrica | Valor |
 |---|---:|
@@ -62,7 +62,7 @@ Convergencia: OK con datos escalados (sin `ConvergenceWarning`).
 
 Fuente: `models/classifier/multiclass/20260803-1619_multiclass_C1/metrics_validation.json`.
 
-## 6. Evaluación exploratoria sobre filas multigénero (§17.5)
+## 6. Evaluación exploratoria sobre filas multigénero (sección 17.5)
 
 | Conjunto | Hit@1 | Hit@3 | Recall@5 | Filas |
 |---|---:|---:|---:|---:|
@@ -71,7 +71,7 @@ Fuente: `models/classifier/multiclass/20260803-1619_multiclass_C1/metrics_valida
 
 Fuentes: notebook `07_multiclass_classifier.ipynb` y `reports/metrics/multiclass_final_test_evaluation.json`.
 
-## 7. Evaluación final única sobre test (§17.4)
+## 7. Evaluación final única sobre test (sección 17.4)
 
 Ejecutada una sola vez con `scripts/evaluate_final_multiclass_model.py --use-test`.
 
@@ -100,15 +100,15 @@ Pares más confundidos (test): `detroit-techno→minimal-techno` (29),
 
 C2/C3 ganan en calidad (+26 % / +29 % de accuracy respecto a C1) pero pesan
 ~650 MB cada uno e impiden el despliegue en Streamlit Community Cloud. El
-propietario aprobó **C1** (§7 de AGENTS.md) por viabilidad (0,5 MB, ~32 ms).
+propietario aprobó **C1** (sección 7 de AGENTS.md) por viabilidad (0,5 MB, ~32 ms).
 C2/C3 se eliminaron tras consolidar el reporte
 `reports/experiments/classifier_multiclass_comparison.json`.
 
 ## 9. Limitaciones
 
-- Laboratorio experimental (§17); no reemplaza etiquetas originales.
-- Las puntuaciones no calibradas **no** son probabilidades (§16.10).
+- Laboratorio experimental (sección 17); no reemplaza etiquetas originales.
+- Las puntuaciones no calibradas **no** son probabilidades (sección 16.10).
 - La muestra es balanceada por bloque; no permite inferir prevalencia real de
-  Spotify (§2.3).
+  Spotify (sección 2.3).
 - Dos clases no tienen ejemplos en train (112/114); sus predicciones dependen
   del comportamiento del solver fuera del soporte observado.

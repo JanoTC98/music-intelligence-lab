@@ -1,4 +1,4 @@
-"""Run the offline evaluation of the track recommender (AGENTS.md §14.11).
+"""Run the offline evaluation of the track recommender (AGENTS.md sección 14.11).
 
 Usage:
     uv run python scripts/evaluate_recommender.py

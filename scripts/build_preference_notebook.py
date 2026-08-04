@@ -1,6 +1,6 @@
 """Generate notebooks/05_preference_recommender_experiments.ipynb.
 
-The notebook demonstrates the preference recommender (AGENTS.md §15): preset
+The notebook demonstrates the preference recommender (AGENTS.md sección 15): preset
 loading, weighted distance ranking, out-of-distribution detection and optional
 MMR diversity reranking.
 
@@ -35,8 +35,8 @@ def build() -> nbformat.NotebookNode:
 
 **Proyecto:** Spotify Music Intelligence
 **Módulo 5:** Recomendador por preferencias
-**Objetivo:** validar presets editables, distancia ponderada (§15.6), detección
-de perfiles fuera de distribución (§15.8) y diversidad MMR opcional (§15.9).
+**Objetivo:** validar presets editables, distancia ponderada (sección 15.6), detección
+de perfiles fuera de distribución (sección 15.8) y diversidad MMR opcional (sección 15.9).
 
 Unidad de modelado: `recording_group_id`. Se excluyen las grabaciones con
 análisis acústico incompleto.
@@ -50,7 +50,7 @@ probabilidades**."""
         md(
             """## 1. Carga de configuración y presets
 
-Los presets viven en `configs/presets.yaml` (AGENTS.md §32.6) y son editables
+Los presets viven en `configs/presets.yaml` (AGENTS.md sección 32.6) y son editables
 sin tocar Python. Cada preset define valores y pesos por variable (escala 0–3)."""
         )
     )
@@ -122,7 +122,7 @@ print(results[["track_name", "artists", "distance", "similarity"]].to_string(ind
         md(
             """## 4. Perfil manual y rechazo de pesos cero
 
-Se valida que un perfil con todos los pesos en cero es rechazado (§15.5)."""
+Se valida que un perfil con todos los pesos en cero es rechazado (sección 15.5)."""
         )
     )
     cells.append(
@@ -165,7 +165,7 @@ print("Peso 0 ignora la variable; perfil manual válido.")"""
             """## 5. Perfiles fuera de distribución (OOD)
 
 Se compara la distancia del perfil al centroide del catálogo con los
-percentiles p95/p99 precomputados (§15.8)."""
+percentiles p95/p99 precomputados (sección 15.8)."""
         )
     )
     cells.append(

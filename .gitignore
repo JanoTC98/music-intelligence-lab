@@ -39,7 +39,7 @@ models/**/*.joblib
 models/**/*.npy
 models/**/*.npz
 models/**/*.pkl
-# Production artifacts versioned for deployment (AGENTS.md §27, Opción A).
+# Production artifacts versioned for deployment (AGENTS.md sección 27, Opción A).
 # Retraining keeps timestamps; globs match the serving bundle regardless.
 !models/recommender/v1/*.joblib
 !models/recommender/v1/*.npy

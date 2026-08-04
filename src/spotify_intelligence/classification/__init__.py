@@ -1,1 +1,1 @@
-"""Multilabel and multiclass classification experiments (AGENTS.md §16/§17)."""
+"""Multilabel and multiclass classification experiments (AGENTS.md sección 16/sección 17)."""

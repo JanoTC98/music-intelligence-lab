@@ -1,4 +1,4 @@
-"""Multilabel classification models (AGENTS.md §16.6)."""
+"""Multilabel classification models (AGENTS.md sección 16.6)."""
 
 from __future__ import annotations
 
@@ -71,7 +71,7 @@ class ClassifierChainEnsemble:
     """M2: an ensemble of ClassifierChain models with averaged scores.
 
     Three chains are trained with ``order="random"`` and seeds ``42, 43, 44``
-    (§16.6). Scores are averaged for comparison; the prediction is derived
+    (sección 16.6). Scores are averaged for comparison; the prediction is derived
     from the averaged score matrix. Order dependence is documented as an
     experimental limitation.
     """

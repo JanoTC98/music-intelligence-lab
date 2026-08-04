@@ -1,4 +1,4 @@
-"""Compare multilabel classifiers M0..M4 on validation (AGENTS.md §16.6/§16.9).
+"""Compare multilabel classifiers M0..M4 on validation (AGENTS.md sección 16.6/sección 16.9).
 
 Usage:
     uv run python scripts/compare_models.py

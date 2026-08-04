@@ -93,7 +93,7 @@ def make_same_work_catalog() -> pd.DataFrame:
     """Catalog where ``g00b`` is a near-duplicate release of ``g00``.
 
     Both share ``track_name`` and ``artists`` but keep a different
-    ``recording_group_id`` (the conservative exact grouping, §3.3). The audio
+    ``recording_group_id`` (the conservative exact grouping, sección 3.3). The audio
     features are perturbed slightly so the duplicate is acoustically the closest
     neighbor of the original.
     """

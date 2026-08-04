@@ -1,4 +1,4 @@
-"""Create and freeze the grouped classification splits (§16.4).
+"""Create and freeze the grouped classification splits (sección 16.4).
 
 Usage:
     uv run python scripts/create_splits.py

@@ -1,11 +1,11 @@
-"""Compare multiclass classifiers C0..C3 on validation (AGENTS.md §17.3/§17.4).
+"""Compare multiclass classifiers C0..C3 on validation (AGENTS.md sección 17.3/sección 17.4).
 
 Usage:
     uv run python scripts/compare_multiclass_models.py
     uv run python scripts/compare_multiclass_models.py --models C0 C1
 
-Trains each requested model with the frozen grouped split, reports §17.4
-metrics and the §17.5 exploratory evaluation on multi-genre validation rows in
+Trains each requested model with the frozen grouped split, reports sección 17.4
+metrics and the sección 17.5 exploratory evaluation on multi-genre validation rows in
 ``reports/experiments/classifier_multiclass_comparison.json``. The test split
 is never used.
 """

@@ -1,11 +1,11 @@
-"""Classification dataset construction (AGENTS.md §16.2, §16.3, §17.1).
+"""Classification dataset construction (AGENTS.md sección 16.2, sección 16.3, sección 17.1).
 
 Builds a feature matrix ``X`` (one row per ``recording_group_id``) and a
 multilabel target matrix ``Y`` (binary ``[n, 114]``) from the processed
 catalog. The transformation is fully deterministic: feature engineering has no
 fitted state, so train, validation and test receive identical treatment.
 
-No scaler is applied at this stage because AGENTS.md §16.3 defines the primary
+No scaler is applied at this stage because AGENTS.md sección 16.3 defines the primary
 feature set verbatim; any scaling decision belongs to the experiment layer.
 """
 
@@ -171,7 +171,7 @@ def build_multiclass_dataset(
     *,
     features: tuple[str, ...] = FEATURE_COLUMNS,
 ) -> MultilabelDataset:
-    """Build the single-label subset used by the multiclass module (§17.1).
+    """Build the single-label subset used by the multiclass module (sección 17.1).
 
     Only recordings with exactly one genre are kept. The target ``Y`` is a
     one-hot row per recording; the encoder preserves the 114-genre ordering so

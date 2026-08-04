@@ -1,4 +1,4 @@
-"""Track recommendation page (AGENTS.md §14)."""
+"""Track recommendation page (AGENTS.md sección 14)."""
 
 from __future__ import annotations
 
@@ -55,7 +55,7 @@ def render() -> None:
 
     if bool(seed.get("audio_analysis_incomplete", False)):
         messages.warn_note(
-            "Esta grabación tiene análisis acústico incompleto (§4.1) y no puede "
+            "Esta grabación tiene análisis acústico incompleto (sección 4.1) y no puede "
             "usarse como semilla."
         )
         return
@@ -81,7 +81,7 @@ def render() -> None:
         "Priorizar canciones del mismo género de la semilla",
         value=bool(affinity_config.get("enabled_default", False)),
         help="Reordena los candidatos acústicamente más cercanos para que "
-        "compartan género con la semilla (variante experimental §30).",
+        "compartan género con la semilla (variante experimental sección 30).",
         key="track_genre_affinity",
     )
 
@@ -114,7 +114,7 @@ def render() -> None:
 
         messages.info_note(
             "La similitud coseno es una medida de distancia acústica, no una "
-            "probabilidad de gusto (§14.10)."
+            "probabilidad de gusto (sección 14.10)."
         )
 
 

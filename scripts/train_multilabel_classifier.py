@@ -1,4 +1,4 @@
-"""Train one multilabel classifier (AGENTS.md §16.5, §16.6, §24.4).
+"""Train one multilabel classifier (AGENTS.md sección 16.5, sección 16.6, sección 24.4).
 
 Usage:
     uv run python scripts/train_multilabel_classifier.py --model M1 [--experiment A]

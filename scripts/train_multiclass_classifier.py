@@ -1,4 +1,4 @@
-"""Train one multiclass (dominant genre) classifier (AGENTS.md §17, §24.4).
+"""Train one multiclass (dominant genre) classifier (AGENTS.md sección 17, sección 24.4).
 
 Usage:
     uv run python scripts/train_multiclass_classifier.py --model C1

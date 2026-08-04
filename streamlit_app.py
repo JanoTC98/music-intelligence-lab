@@ -1,7 +1,7 @@
-"""Streamlit entrypoint / router (AGENTS.md §18.1).
+"""Streamlit entrypoint / router (AGENTS.md sección 18.1).
 
 The script only builds navigation when a Streamlit runtime is active, so
-importing it from pytest is safe and performs no widget calls (§25.7).
+importing it from pytest is safe and performs no widget calls (sección 25.7).
 """
 
 from __future__ import annotations

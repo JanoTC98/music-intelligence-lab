@@ -1,4 +1,4 @@
-"""Table rendering and CSV download helpers (AGENTS.md §18.5)."""
+"""Table rendering and CSV download helpers (AGENTS.md sección 18.5)."""
 
 from __future__ import annotations
 

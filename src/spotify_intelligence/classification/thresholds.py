@@ -1,4 +1,4 @@
-"""Global threshold tuning for multilabel predictions (AGENTS.md §16.8).
+"""Global threshold tuning for multilabel predictions (AGENTS.md sección 16.8).
 
 A single global threshold converts per-label scores into binary predictions.
 The threshold is tuned on the validation split only, optimizing samples F1.
@@ -51,7 +51,7 @@ def tune_global_threshold(
     """Return the global threshold that maximizes ``metric`` on ``y_true``.
 
     ``scores`` is a ``[n, n_labels]`` score matrix (uncalibrated). The grid
-    starts at 0.10 because labels below that are never selected (§16.8).
+    starts at 0.10 because labels below that are never selected (sección 16.8).
     """
     if scores.shape != y_true.shape:
         raise ValueError("scores and y_true must share shape")
