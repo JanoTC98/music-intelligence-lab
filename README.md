@@ -11,6 +11,8 @@ Proyecto end-to-end de ciencia de datos y machine learning que transforma un cat
 7. Un sistema opcional de eventos y feedback almacenado en MySQL.
 8. Un repositorio profesional con pruebas, documentación, CI y despliegue.
 
+**Aplicación desplegada:** [https://music-intelligence-lab.streamlit.app/](https://music-intelligence-lab.streamlit.app/)
+
 ## Funcionalidad implementada
 
 ### Módulo 1 · Ingesta, auditoría y validación
@@ -154,6 +156,7 @@ uv run python -c "import spotify_intelligence"
 
 ## Aplicación web
 
+La app está desplegada en [https://music-intelligence-lab.streamlit.app/](https://music-intelligence-lab.streamlit.app/).
 La app carga los artefactos ya construidos; no entrena. Si falta un artefacto, muestra cómo generarlo.
 
 ```powershell
