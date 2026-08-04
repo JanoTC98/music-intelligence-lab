@@ -53,6 +53,13 @@ identity:
   fingerprint_hash: "sha256"
   expected_exact_recording_groups: 83881
 
+regression:
+  raw_dataset_sha256: "b202fa49909b2d5cef71a04b1d21243cfeb36414535f2ca9272aa646721177bd"
+  raw_rows: 114000
+  quarantined_identity_rows: 1
+  valid_track_ids: 89740
+  exact_recording_groups_after_quarantine: 83881
+
 incomplete_audio:
   required_zero_pattern:
     tempo: 0

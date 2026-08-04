@@ -2,12 +2,15 @@ import json
 
 import pandas as pd
 import pytest
+import yaml
 
 from spotify_intelligence.data.pipeline import prepare_data
 
-RAW_ROWS = 114000
-VALID_TRACK_IDS = 89740
-RECORDING_GROUP_COUNT = 83881
+
+def _load_regression_config() -> dict:
+    with open("configs/data_rules.yaml", encoding="utf-8") as f:
+        config = yaml.safe_load(f)
+    return config.get("regression", {})
 
 
 @pytest.fixture(scope="module")
@@ -27,23 +30,28 @@ def prepared(tmp_path_factory):
 
 
 def test_manifest_counts(prepared):
+    regression = _load_regression_config()
     manifest = prepared["manifest"]
-    assert manifest["raw_rows"] == RAW_ROWS
-    assert manifest["valid_track_ids"] == VALID_TRACK_IDS
-    assert manifest["recording_group_count"] == RECORDING_GROUP_COUNT
+    assert manifest["raw_rows"] == regression["raw_rows"]
+    assert manifest["valid_track_ids"] == regression["valid_track_ids"]
+    assert (
+        manifest["recording_group_count"] == regression["exact_recording_groups_after_quarantine"]
+    )
     assert len(manifest["dataset_sha256"]) == 64
 
 
 def test_quarantine_invalid_identity(prepared):
+    regression = _load_regression_config()
     path = prepared["output_root"] / "data" / "quarantine" / "invalid_identity.parquet"
     assert path.exists()
     df = pd.read_parquet(path)
-    assert len(df) == 1
+    assert len(df) == regression["quarantined_identity_rows"]
 
 
 def test_tracks_contract(prepared):
+    regression = _load_regression_config()
     tracks = pd.read_parquet(prepared["output_root"] / "data" / "processed" / "tracks.parquet")
-    assert len(tracks) == VALID_TRACK_IDS
+    assert len(tracks) == regression["valid_track_ids"]
     assert tracks["track_id"].is_unique
     assert not tracks["recording_group_id"].isna().any()
     required = [
@@ -81,12 +89,13 @@ def test_tracks_contract(prepared):
 
 
 def test_recordings_contract(prepared):
+    regression = _load_regression_config()
     recordings = pd.read_parquet(
         prepared["output_root"] / "data" / "processed" / "recordings.parquet"
     )
-    assert len(recordings) == RECORDING_GROUP_COUNT
+    assert len(recordings) == regression["exact_recording_groups_after_quarantine"]
     assert recordings["recording_group_id"].is_unique
-    assert recordings["track_id_count"].sum() == VALID_TRACK_IDS
+    assert recordings["track_id_count"].sum() == regression["valid_track_ids"]
     required = [
         "recording_group_id",
         "representative_track_id",
@@ -125,8 +134,9 @@ def test_anomalies_reference_counts(prepared):
 
 
 def test_manifest_file_written(prepared):
+    regression = _load_regression_config()
     manifest_path = prepared["output_root"] / "data" / "processed" / "prepare_data_manifest.json"
     assert manifest_path.exists()
     with open(manifest_path) as f:
         data = json.load(f)
-    assert data["raw_rows"] == RAW_ROWS
+    assert data["raw_rows"] == regression["raw_rows"]

@@ -1,0 +1,81 @@
+"""Lightweight checks to prevent documentation/config regressions.
+
+Verifies that AGENTS.md does not embed stale configuration blocks or
+incorrect parameter values, and that config files referenced in
+documentation actually exist.
+"""
+
+from __future__ import annotations
+
+import pathlib
+
+import yaml
+
+PROJECT_ROOT = pathlib.Path(__file__).resolve().parent.parent.parent
+AGENTS_PATH = PROJECT_ROOT / "AGENTS.md"
+CONFIGS_DIR = PROJECT_ROOT / "configs"
+
+
+def _read_agents() -> str:
+    return AGENTS_PATH.read_text(encoding="utf-8")
+
+
+def _load_yaml(name: str) -> dict:
+    path = CONFIGS_DIR / name
+    with open(path, encoding="utf-8") as f:
+        return yaml.safe_load(f)
+
+
+class TestAgentsNoConfigBlocks:
+    def test_no_model_parameters_block(self):
+        content = _read_agents()
+        assert "## 32.5 configs/model_parameters.yaml" not in content
+
+    def test_no_n_estimators_500_for_c2_c3(self):
+        content = _read_agents()
+        assert "n_estimators = 500" not in content
+        assert "n_estimators: 500" not in content
+
+
+class TestConfigPathsExist:
+    def test_data_rules_yaml_exists(self):
+        assert (CONFIGS_DIR / "data_rules.yaml").exists()
+
+    def test_recommender_features_yaml_exists(self):
+        assert (CONFIGS_DIR / "recommender_features.yaml").exists()
+
+    def test_classifier_features_yaml_exists(self):
+        assert (CONFIGS_DIR / "classifier_features.yaml").exists()
+
+    def test_model_parameters_yaml_exists(self):
+        assert (CONFIGS_DIR / "model_parameters.yaml").exists()
+
+    def test_presets_yaml_exists(self):
+        assert (CONFIGS_DIR / "presets.yaml").exists()
+
+    def test_app_yaml_exists(self):
+        assert (CONFIGS_DIR / "app.yaml").exists()
+
+
+class TestRegressionConsistency:
+    def test_identity_matches_regression_block(self):
+        config = _load_yaml("data_rules.yaml")
+        regression = config.get("regression", {})
+        identity = config.get("identity", {})
+        assert (
+            regression["exact_recording_groups_after_quarantine"]
+            == identity["expected_exact_recording_groups"]
+        )
+
+    def test_regression_block_has_required_keys(self):
+        config = _load_yaml("data_rules.yaml")
+        regression = config.get("regression", {})
+        required = [
+            "raw_dataset_sha256",
+            "raw_rows",
+            "quarantined_identity_rows",
+            "valid_track_ids",
+            "exact_recording_groups_after_quarantine",
+        ]
+        for key in required:
+            assert key in regression, f"Missing regression key: {key}"

@@ -1,0 +1,58 @@
+-- Verify SQL Server schema for Spotify Music Intelligence
+
+-- Check current database
+SELECT DB_NAME() AS current_database;
+
+-- Verify database exists
+SELECT name FROM sys.databases WHERE name = 'spotify_app';
+
+-- Verify table existence
+SELECT TABLE_NAME
+FROM INFORMATION_SCHEMA.TABLES
+WHERE TABLE_CATALOG = 'spotify_app'
+ORDER BY TABLE_NAME;
+
+-- Verify essential columns
+SELECT TABLE_NAME, COLUMN_NAME, DATA_TYPE, IS_NULLABLE
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE TABLE_CATALOG = 'spotify_app'
+ORDER BY TABLE_NAME, ORDINAL_POSITION;
+
+-- Verify primary keys
+SELECT
+    TABLE_NAME,
+    CONSTRAINT_NAME
+FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS
+WHERE TABLE_CATALOG = 'spotify_app'
+  AND CONSTRAINT_TYPE = 'PRIMARY KEY';
+
+-- Verify foreign keys
+SELECT
+    TABLE_NAME,
+    CONSTRAINT_NAME,
+    REFERENCED_TABLE_NAME
+FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS
+WHERE CONSTRAINT_CATALOG = 'spotify_app';
+
+-- Verify CHECK constraints
+SELECT
+    TABLE_NAME,
+    CONSTRAINT_NAME,
+    CHECK_CLAUSE
+FROM INFORMATION_SCHEMA.CHECK_CONSTRAINTS
+WHERE CONSTRAINT_CATALOG = 'spotify_app';
+
+-- Verify indexes
+SELECT
+    TABLE_NAME,
+    INDEX_NAME,
+    COLUMN_NAME,
+    NON_UNIQUE
+FROM INFORMATION_SCHEMA.STATISTICS
+WHERE TABLE_CATALOG = 'spotify_app'
+ORDER BY TABLE_NAME, INDEX_NAME, ORDINAL_POSITION;
+
+-- Verify database user exists
+SELECT name, type_desc
+FROM sys.database_principals
+WHERE name = 'spotify_app';

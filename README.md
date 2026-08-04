@@ -195,3 +195,19 @@ uv run pytest
 - `data/` — dataset bruto, cuarentena, intermedios y procesados.
 - `tests/` — pruebas unitarias e integración.
 - `notebooks/` — exploración y experimentos.
+
+## Documentación
+
+- [AGENTS.md](AGENTS.md) — Especificación normativa del proyecto.
+- [Arquitectura](docs/architecture.md) — Arquitectura actual y planificada.
+- [Roadmap](docs/roadmap.md) — Estado de los módulos.
+- [Especificaciones](docs/spec/) — Detalles por dominio (datos, recomendadores, clasificación, aplicación, persistencia).
+- [Procedencia de fuentes](docs/source-provenance.md) — Origen y verificabilidad de las fuentes.
+- [Base de datos](database/README.md) — Scripts y configuración de persistencia.
+- [Despliegue](docs/deployment.md) — Instrucciones de publicación.
+
+## Empaquetado limpio
+
+```powershell
+uv run python scripts/package_source.py --dry-run
+```
