@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pandas as pd
 import pytest
 
@@ -8,19 +10,28 @@ from spotify_intelligence.data.contracts import (
 )
 from spotify_intelligence.data.load import load_dataset, load_dataset_from_config
 
+_RAW_DATASET_PRESENT = Path("data/raw/dataset.csv").exists()
+_requires_raw_dataset = pytest.mark.skipif(
+    not _RAW_DATASET_PRESENT,
+    reason="data/raw/dataset.csv not available (raw dataset is not versioned)",
+)
 
+
+@_requires_raw_dataset
 def test_load_dataset_returns_dataframe():
     path = "data/raw/dataset.csv"
     df = load_dataset(path)
     assert isinstance(df, pd.DataFrame)
 
 
+@_requires_raw_dataset
 def test_load_dataset_expected_shape():
     path = "data/raw/dataset.csv"
     df = load_dataset(path)
     assert df.shape == (114000, 21)
 
 
+@_requires_raw_dataset
 def test_load_dataset_has_required_columns():
     path = "data/raw/dataset.csv"
     df = load_dataset(path)
@@ -34,6 +45,7 @@ def test_load_dataset_file_not_found():
         load_dataset("nonexistent.csv")
 
 
+@_requires_raw_dataset
 def test_load_dataset_via_config():
     df = load_dataset_from_config()
     assert isinstance(df, pd.DataFrame)

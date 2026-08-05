@@ -3,8 +3,14 @@ import tempfile
 from pathlib import Path
 
 import pandas as pd
+import pytest
 
 from spotify_intelligence.data.audit import audit_dataset, compute_file_hash
+
+pytestmark = pytest.mark.skipif(
+    not Path("data/raw/dataset.csv").exists(),
+    reason="data/raw/dataset.csv not available (raw dataset is not versioned)",
+)
 
 
 def test_compute_file_hash():

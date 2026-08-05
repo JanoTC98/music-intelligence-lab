@@ -1,10 +1,16 @@
 import json
+from pathlib import Path
 
 import pandas as pd
 import pytest
 import yaml
 
 from spotify_intelligence.data.pipeline import prepare_data
+
+pytestmark = pytest.mark.skipif(
+    not Path("data/raw/dataset.csv").exists(),
+    reason="data/raw/dataset.csv not available (raw dataset is not versioned)",
+)
 
 
 def _load_regression_config() -> dict:
