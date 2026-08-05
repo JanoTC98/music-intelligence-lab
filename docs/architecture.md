@@ -30,7 +30,7 @@
 - `reports/` — Métricas y figuras.
 
 ### Persistencia
-- `database/` — Scripts MySQL y SQL Server.
+- `database/` — Esquemas opcionales MySQL y SQL Server. La persistencia de eventos y feedback está **fuera del alcance actual**; no se implementa código de tracking.
 
 ## Planificado
 

@@ -65,6 +65,41 @@ def test_c0_predicts_majority_class(prepared):
     np.testing.assert_allclose(proba.sum(axis=1), np.ones(len(X)))
 
 
+def test_frequent_baseline_returns_original_non_consecutive_class_labels():
+    X = np.zeros((5, 2))
+    y = np.array([5, 5, 5, 9, 9])
+    model = FrequentClassBaseline().fit(X, y)
+
+    np.testing.assert_array_equal(
+        model.predict(X),
+        np.array([5, 5, 5, 5, 5]),
+    )
+    assert model.majority_class_ == 5
+    assert model.majority_index_ == 0
+
+
+def test_frequent_baseline_predict_matches_proba_argmax():
+    X = np.zeros((4, 2))
+    y = np.array([5, 5, 9, 5])
+    model = FrequentClassBaseline().fit(X, y)
+    predicted_from_proba = model.classes_[model.predict_proba(X).argmax(axis=1)]
+    np.testing.assert_array_equal(model.predict(X), predicted_from_proba)
+
+
+def test_frequent_baseline_rejects_empty_y():
+    model = FrequentClassBaseline()
+    with pytest.raises(ValueError, match="empty"):
+        model.fit(np.zeros((0, 2)), np.array([], dtype=int))
+
+
+def test_frequent_baseline_requires_fit_before_predict():
+    model = FrequentClassBaseline()
+    with pytest.raises(RuntimeError, match="fitted"):
+        model.predict(np.zeros((3, 2)))
+    with pytest.raises(RuntimeError, match="fitted"):
+        model.predict_proba(np.zeros((3, 2)))
+
+
 def test_c0_classes_are_unique_sorted(prepared):
     X, y = prepared
     model = FrequentClassBaseline().fit(X, y)

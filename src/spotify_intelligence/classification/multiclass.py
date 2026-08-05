@@ -37,24 +37,37 @@ class FrequentClassBaseline:
 
     def __init__(self) -> None:
         self.classes_: np.ndarray | None = None
-        self.majority_index_ = 0
+        self.majority_index_: int | None = None
+        self.majority_class_: int | None = None
+
+    def _check_fitted(self) -> None:
+        if self.classes_ is None or self.majority_index_ is None or self.majority_class_ is None:
+            raise RuntimeError("FrequentClassBaseline must be fitted before predict")
 
     def fit(self, X: np.ndarray, y: np.ndarray) -> FrequentClassBaseline:
-        classes, counts = np.unique(np.asarray(y), return_counts=True)
+        y = np.asarray(y)
+        if len(y) == 0:
+            raise ValueError("Cannot fit FrequentClassBaseline with an empty y")
+        classes, counts = np.unique(y, return_counts=True)
         self.classes_ = classes.astype(int)
         self.majority_index_ = int(np.argmax(counts))
+        self.majority_class_ = int(self.classes_[self.majority_index_])
         return self
 
     def predict(self, X: np.ndarray) -> np.ndarray:
-        if self.classes_ is None:
-            raise RuntimeError("FrequentClassBaseline must be fitted before predict")
-        return np.full(len(X), self.majority_index_, dtype=int)
+        self._check_fitted()
+        majority_class = self.majority_class_
+        assert majority_class is not None
+        return np.full(len(X), majority_class, dtype=int)
 
     def predict_proba(self, X: np.ndarray) -> np.ndarray:
-        if self.classes_ is None:
-            raise RuntimeError("FrequentClassBaseline must be fitted before predict_proba")
-        proba = np.zeros((len(X), len(self.classes_)), dtype=float)
-        proba[:, self.majority_index_] = 1.0
+        self._check_fitted()
+        classes = self.classes_
+        majority_index = self.majority_index_
+        assert classes is not None
+        assert majority_index is not None
+        proba = np.zeros((len(X), len(classes)), dtype=float)
+        proba[:, majority_index] = 1.0
         return proba
 
 

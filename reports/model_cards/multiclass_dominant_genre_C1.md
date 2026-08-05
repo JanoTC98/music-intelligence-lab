@@ -2,10 +2,10 @@
 
 **Proyecto:** Spotify Music Intelligence
 **Módulo 7:** Clasificador multiclase secundario
-**Experiment id:** `20260803-1619_multiclass_C1`
-**Artefacto:** `models/classifier/multiclass/20260803-1619_multiclass_C1/`
+**Experiment id:** `20260805-1702_multiclass_C1`
+**Artefacto:** `models/classifier/multiclass/20260805-1702_multiclass_C1/`
 **Modelo:** Logistic Regression (multiclass `lbfgs`)
-**Fecha:** 3 de agosto de 2026
+**Fecha:** 5 de agosto de 2026
 
 ---
 
@@ -21,8 +21,8 @@ etiqueta original.
 ## 2. Datos
 
 - Unidad: `recording_group_id`.
-- Población: 69.943 grabaciones monoetiqueta.
-- Splits agrupados congelados: train **48.987** / validación **10.496** / test **10.460**.
+- Población: 69.798 grabaciones monoetiqueta.
+- Splits agrupados congelados: train **48.886** / validación **10.475** / test **10.437**.
 - Clases en train: **112 de 114**; conteos por clase 47–717 (desbalance ~15×).
 - `split_sha256`: `7cdb3f42c405725ff341667b7ab27d9e928bd82605f599425f11857008d39b67`
 - `dataset_sha256`: `b202fa49909b2d5cef71a04b1d21243cfeb36414535f2ca9272aa646721177bd`
@@ -54,22 +54,23 @@ Convergencia: OK con datos escalados (sin `ConvergenceWarning`).
 
 | Métrica | Valor |
 |---|---:|
-| Accuracy | 0.2247 |
-| Macro F1 | 0.1627 |
-| Balanced accuracy | 0.1822 |
-| Top-3 accuracy | 0.3980 |
-| Top-5 accuracy | 0.4914 |
+| Accuracy | 0.2234 |
+| Macro F1 | 0.1622 |
+| Balanced accuracy | 0.1818 |
+| Top-3 accuracy | 0.3968 |
+| Top-5 accuracy | 0.4897 |
 
-Fuente: `models/classifier/multiclass/20260803-1619_multiclass_C1/metrics_validation.json`.
+Fuente: `models/classifier/multiclass/20260805-1702_multiclass_C1/metrics_validation.json`.
 
 ## 6. Evaluación exploratoria sobre filas multigénero
 
 | Conjunto | Hit@1 | Hit@3 | Recall@5 | Filas |
 |---|---:|---:|---:|---:|
-| Validación | 0.1946 | 0.3931 | 0.2836 | 2.086 |
-| Test | 0.1790 | 0.3665 | 0.2631 | 2.123 |
+| Validación | 0.1946 | 0.3921 | 0.2836 | 2.086 |
+| Test | 0.1780 | 0.3665 | 0.2635 | 2.123 |
 
-Fuentes: notebook `07_multiclass_classifier.ipynb` y `reports/metrics/multiclass_final_test_evaluation.json`.
+Fuente validación: `reports/experiments/classifier_multiclass_comparison.json`.
+Fuente test: `reports/metrics/multiclass_final_test_evaluation.json`.
 
 ## 7. Evaluación final única sobre test
 
@@ -77,16 +78,16 @@ Ejecutada una sola vez con `scripts/evaluate_final_multiclass_model.py --use-tes
 
 | Métrica | Test | Validación |
 |---|---:|---:|
-| Accuracy | **0.2202** | 0.2247 |
-| Macro F1 | **0.1606** | 0.1627 |
-| Balanced accuracy | 0.1818 | 0.1822 |
-| Top-3 accuracy | 0.3946 | 0.3980 |
-| Top-5 accuracy | 0.4845 | 0.4914 |
-| Latencia media (ms) | 32.36 | — |
+| Accuracy | **0.2191** | 0.2234 |
+| Macro F1 | **0.1605** | 0.1622 |
+| Balanced accuracy | 0.1815 | 0.1818 |
+| Top-3 accuracy | 0.3935 | 0.3968 |
+| Top-5 accuracy | 0.4840 | 0.4897 |
+| Latencia media (ms) | 31.77 | — |
 
 Consistente con validación (el modelo no degrada en test).
 
-Pares más confundidos (test): `detroit-techno→minimal-techno` (29),
+Pares más confundidos (test): `detroit-techno→minimal-techno` (30),
 `hardstyle→happy` (29), `romance→swedish` (28).
 
 ## 8. Comparación de candidatos (validación)
@@ -94,7 +95,7 @@ Pares más confundidos (test): `detroit-techno→minimal-techno` (29),
 | Modelo | Accuracy | Macro F1 | Tamaño |
 |---|---:|---:|---:|
 | C0 · clase frecuente | 0.0120 | 0.0002 | 0,3 MB |
-| **C1 · logística** | **0.2247** | **0.1627** | **0,5 MB** |
+| **C1 · logística** | **0.2234** | **0.1622** | **0,5 MB** |
 | C2 · Extra Trees | 0.2527 | 0.1735 | 690 MB |
 | C3 · Random Forest | 0.2866 | 0.2097 | 657 MB |
 

@@ -8,8 +8,7 @@ Proyecto end-to-end de ciencia de datos y machine learning que transforma un cat
 4. Un experimento multiclase de género acústico dominante.
 5. Una aplicación web multipágina en Streamlit.
 6. Un pipeline reproducible de datos y modelos.
-7. Un sistema opcional de eventos y feedback almacenado en MySQL.
-8. Un repositorio profesional con pruebas, documentación, CI y despliegue.
+7. Un repositorio profesional con pruebas, documentación, CI y despliegue.
 
 **Aplicación desplegada:** [https://music-intelligence-lab.streamlit.app/](https://music-intelligence-lab.streamlit.app/)
 
@@ -86,13 +85,14 @@ Catálogo musical *Spotify Tracks Dataset* (≈ 114.000 filas) descargado de Kag
 - Notebook `notebooks/06_multilabel_classifier.ipynb`.
 
 ### Módulo 7 · Clasificador multiclase de género dominante
-- Dataset de grabaciones monoetiqueta: 69.943 grupos; split agrupado congelado train 48.987 / validación 10.496 / test 10.460; 112/114 clases en train (conteos 47–717).
+- Dataset de grabaciones monoetiqueta: 69.798 grupos; split agrupado congelado train 48.886 / validación 10.475 / test 10.437; 112/114 clases en train (conteos 47–717).
+- Experiment A (excluye `audio_analysis_incomplete`): las filas con análisis de audio incompleto no participan en ninguno de los tres conjuntos.
 - Modelos C0 (clase frecuente), C1 (logística lbfgs C=1.0), C2 (Extra Trees) y C3 (Random Forest) con `max_depth=12` y `n_estimators=300`.
-- Comparación (validación): C0 acc 0.0120, C1 acc 0.2247, C2 acc 0.2527, C3 acc 0.2866 (macro F1 0.0002 / 0.1627 / 0.1735 / 0.2097). Reporte en `reports/experiments/classifier_multiclass_comparison.json`.
+- Comparación (validación): C0 acc 0.0120, C1 acc 0.2234, C2 acc 0.2527, C3 acc 0.2866 (macro F1 0.0002 / 0.1622 / 0.1735 / 0.2097). Reporte en `reports/experiments/classifier_multiclass_comparison.json`.
 - C2/C3 ganan en calidad pero pesan ~650 MB cada uno; el propietario aprobó **C1** como modelo final (~0,5 MB, viable en Streamlit). C2/C3 se eliminaron tras consolidar el reporte.
 - Métricas sobre validación en `models/classifier/multiclass/<id_C1>/metrics_validation.json`.
-- Evaluación exploratoria sobre filas multigénero: validación Hit@1=0.195, Hit@3=0.393, Recall@5=0.284 (2.086 filas); test Hit@1=0.179, Hit@3=0.366, Recall@5=0.263 (2.123 filas).
-- Evaluación única sobre test congelado en `reports/metrics/multiclass_final_test_evaluation.json` (accuracy test=0.2202, macro F1=0.1606), consistente con validación.
+- Evaluación exploratoria sobre filas multigénero: validación Hit@1=0.195, Hit@3=0.392, Recall@5=0.284 (2.086 filas); test Hit@1=0.178, Hit@3=0.366, Recall@5=0.263 (2.123 filas).
+- Evaluación única sobre test congelado en `reports/metrics/multiclass_final_test_evaluation.json` (accuracy test=0.2191, macro F1=0.1605), consistente con validación.
 - `scripts/evaluate_final_multiclass_model.py` evalúa el test congelado únicamente con `--use-test`.
 - Notebook `notebooks/07_multiclass_classifier.ipynb`.
 
@@ -104,7 +104,6 @@ Catálogo musical *Spotify Tracks Dataset* (≈ 114.000 filas) descargado de Kag
 - El recomendador excluye la propia grabación y también otras grabaciones de la misma canción (mismo título + artistas en otro `recording_group_id`) para no recomendar la misma obra como primera opción.
 - Carga de artefactos de clasificación en `src/spotify_intelligence/classification/serving.py` (M1_A/M1_B multietiqueta y C1 multiclase) con selector A/B en el laboratorio multietiqueta.
 - Resultados descargables en CSV, explicaciones por característica y avisos de limitaciones; sin branding oficial de Spotify.
-- Tracking deshabilitado por defecto (`configs/app.yaml`); Módulo 9 opcional.
 
 ## Comparativa de modelos evaluados
 
@@ -142,7 +141,7 @@ M1 con experimento B (imputación de audio incompleto): samples F1 0,1395 → **
 | Modelo | Accuracy | macro F1 | Top-5 | Tamaño | Latencia | Veredicto |
 |---|---:|---:|---:|---:|---:|---|
 | C0 · clase frecuente | 0,0120 | 0,0002 | 0,046 | 0,3 MB | 2,6 ms | Baseline trivial |
-| **C1 · logística** | **0,2247** | 0,1627 | 0,491 | 0,5 MB | 35 ms | **Final** · test: accuracy 0,2202 |
+| **C1 · logística** | **0,2234** | 0,1622 | 0,490 | 0,5 MB | 33 ms | **Final** · test: accuracy 0,2191 |
 | C2 · Extra Trees | 0,2527 | 0,1735 | 0,519 | 690 MB | 2.067 ms | No viable (peso + ~60× lento) |
 | C3 · Random Forest | 0,2866 | 0,2097 | 0,562 | 657 MB | 2.171 ms | No viable (peso + ~60× lento) |
 
@@ -182,8 +181,7 @@ Requisitos previos por página:
 
 Instrucciones para publicar en Streamlit Community Cloud (incluida la decisión de
 versionar los artefactos `data/processed/` y `models/`, ≈ 100 MB) se detallan en
-la documentación de despliegue. La app pública opera con tracking
-deshabilitado.
+la documentación de despliegue.
 
 ## Calidad
 

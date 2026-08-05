@@ -1,31 +1,31 @@
 {
-  "experiment_id": "20260803-1619_multiclass_C0",
+  "experiment_id": "20260805-1701_multiclass_C0",
   "task": "multiclass",
   "model": "frequent_class_baseline",
   "dataset_sha256": "b202fa49909b2d5cef71a04b1d21243cfeb36414535f2ca9272aa646721177bd",
   "split_sha256": "7cdb3f42c405725ff341667b7ab27d9e928bd82605f599425f11857008d39b67",
-  "config_sha256": "61576ff106cb4171a43f12379de3a9e0d5d36ce8e089926fe686c9c2b79901ea",
-  "git_commit": "c48408434235442379431f4d8ee1fb6754d6ccbc",
+  "config_sha256": "ceeb2d1ced04c271e98b5d4d375444bdd493e0a37e806e07e726434860ff8a4b",
+  "git_commit": "73f4d3e0297f12c1c55491fcccac35ff712c82ea",
   "random_state": 42,
   "test_used": false,
-  "started_at_utc": "2026-08-03T16:19:14.282082+00:00",
-  "finished_at_utc": "2026-08-03T16:19:15.048690+00:00",
-  "training_seconds": 0.0024,
-  "artifact_path": "models\\classifier\\multiclass\\20260803-1619_multiclass_C0",
+  "started_at_utc": "2026-08-05T17:01:35.979775+00:00",
+  "finished_at_utc": "2026-08-05T17:01:36.366841+00:00",
+  "training_seconds": 0.002,
+  "artifact_path": "models\\classifier\\multiclass\\20260805-1701_multiclass_C0",
   "model_id": "C0",
   "experiment": "A",
-  "feature_config_sha256": "d2bf06e5d49ff94f1342abe9fc232b24755aa9fc758570c10c03a2228983afeb",
+  "feature_config_sha256": "dc8d3fe1ce48af799b9dcd5f65faa9046933c0500676c60e0bf890f7bfbf272c",
   "model_size_mb": 0.0038,
-  "train_rows": 48987,
-  "validation_rows": 10496,
+  "train_rows": 48886,
+  "validation_rows": 10475,
   "n_features": 18,
   "n_classes": 112,
   "validation_metrics": {
-    "accuracy": 0.012004573170731708,
-    "macro_f1": 0.00021182451515722086,
+    "accuracy": 0.012028639618138425,
+    "macro_f1": 0.00021224412791246108,
     "balanced_accuracy": 0.008928571428571428,
-    "top3_accuracy": 0.03401295731707317,
-    "top5_accuracy": 0.045826981707317076,
+    "top3_accuracy": 0.03408114558472554,
+    "top5_accuracy": 0.04591885441527446,
     "confusion_matrix_normalized": [
       [
         0.0,
@@ -13279,11 +13279,6 @@
         "count": 155
       },
       {
-        "true_genre": "ska",
-        "predicted_genre": "soul",
-        "count": 153
-      },
-      {
         "true_genre": "bluegrass",
         "predicted_genre": "soul",
         "count": 148
@@ -13302,9 +13297,14 @@
         "true_genre": "comedy",
         "predicted_genre": "soul",
         "count": 147
+      },
+      {
+        "true_genre": "techno",
+        "predicted_genre": "soul",
+        "count": 146
       }
     ],
     "n_classes_seen": 112,
-    "latency_mean_ms": 3.6774
+    "latency_mean_ms": 2.4227
   }
 }

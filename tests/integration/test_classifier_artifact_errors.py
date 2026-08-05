@@ -51,7 +51,7 @@ def test_multilabel_unknown_model_key_raises_contract_error(tmp_path: Path) -> N
 
 
 def test_multiclass_missing_joblib_raises_contract_error(tmp_path: Path) -> None:
-    artifact_dir = tmp_path / "multiclass" / "20260803-1619_multiclass_C1"
+    artifact_dir = tmp_path / "multiclass" / "20260805-1702_multiclass_C1"
     artifact_dir.mkdir(parents=True)
     (artifact_dir / "manifest.json").write_text(
         '{"experiment_id": "x", "model_id": "C1", "experiment": "A"}', encoding="utf-8"

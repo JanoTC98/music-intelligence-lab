@@ -61,14 +61,27 @@ class MultilabelDataset:
         feature_columns: list[str],
         incomplete_mask: np.ndarray | None = None,
     ) -> None:
+        if len(Y) != len(X):
+            raise DataContractError(f"Y length {len(Y)} does not match X length {len(X)}")
+        if len(recording_group_ids) != len(X):
+            raise DataContractError(
+                f"recording_group_ids length {len(recording_group_ids)} "
+                f"does not match X length {len(X)}"
+            )
+        if incomplete_mask is None:
+            mask = np.zeros(len(X), dtype=bool)
+        else:
+            mask = np.asarray(incomplete_mask, dtype=bool)
+            if len(mask) != len(X):
+                raise DataContractError(
+                    f"incomplete_mask length {len(mask)} does not match X length {len(X)}"
+                )
         self.X = X
         self.Y = Y
         self.genre_encoder = genre_encoder
         self.recording_group_ids = recording_group_ids
         self.feature_columns = feature_columns
-        self.incomplete_mask = (
-            incomplete_mask if incomplete_mask is not None else np.zeros(len(X), dtype=bool)
-        )
+        self.incomplete_mask = mask
 
     @property
     def n_samples(self) -> int:
@@ -105,6 +118,25 @@ class MultilabelDataset:
             incomplete_mask=self.incomplete_mask[mask],
         )
         return sub, mask
+
+
+def build_incomplete_mask(
+    feature_frame: pd.DataFrame,
+    recordings: pd.DataFrame,
+) -> np.ndarray:
+    """Return a boolean mask aligned to ``feature_frame`` by ``recording_group_id``.
+
+    A group is marked incomplete when ``recordings`` has an explicit
+    ``audio_analysis_incomplete`` True for that group. Missing values become
+    ``False`` only when the group has no explicit mark. Alignment is by
+    identifier, not by row order, so ``recordings`` may be shuffled.
+    """
+    if "audio_analysis_incomplete" not in recordings.columns:
+        return np.zeros(len(feature_frame), dtype=bool)
+    incomplete_map = recordings.set_index("recording_group_id")["audio_analysis_incomplete"]
+    return (
+        feature_frame["recording_group_id"].map(incomplete_map).fillna(False).to_numpy(dtype=bool)
+    )
 
 
 def build_multilabel_dataset(
@@ -144,16 +176,7 @@ def build_multilabel_dataset(
 
     X = feature_frame[list(features)].copy()
     feature_columns = list(features)
-    if "audio_analysis_incomplete" in recordings.columns:
-        incomplete_map = recordings.set_index("recording_group_id")["audio_analysis_incomplete"]
-        incomplete_mask = (
-            feature_frame["recording_group_id"]
-            .map(incomplete_map)
-            .fillna(False)
-            .to_numpy(dtype=bool)
-        )
-    else:
-        incomplete_mask = np.zeros(len(feature_frame), dtype=bool)
+    incomplete_mask = build_incomplete_mask(feature_frame, recordings)
     return MultilabelDataset(
         X=X,
         Y=Y,
@@ -199,12 +222,14 @@ def build_multiclass_dataset(
             Y[row, label_index[genre]] = 1
 
     X = feature_frame[list(features)].copy()
+    incomplete_mask = build_incomplete_mask(feature_frame, recordings)
     return MultilabelDataset(
         X=X,
         Y=Y,
         genre_encoder=encoder,
         recording_group_ids=pd.Index(feature_frame["recording_group_id"].tolist()),
         feature_columns=list(features),
+        incomplete_mask=incomplete_mask,
     )
 
 

@@ -11,8 +11,7 @@
 - Experimento multiclase de género acústico dominante.
 - Aplicación web multipágina en Streamlit.
 - Pipeline reproducible de datos y modelos.
-- Sistema opcional de eventos y feedback en MySQL.
-- Repositorio profesional con pruebas, documentación, CI y despliegue.
+- Repositorio profesional con pruebas, documentación y despliegue.
 
 ## En curso
 
@@ -25,4 +24,4 @@
 
 ## Opcional
 
-- Funcionalidades que pueden añadirse sin afectar el núcleo del producto.
+- Persistencia opcional de eventos y feedback en MySQL. Esquemas en `database/` y especificación en `docs/spec/persistence.md`, pero el módulo **no está implementado** ni forma parte del alcance actual. Requeriría MySQL local y no afecta a la aplicación desplegada.

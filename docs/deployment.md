@@ -54,9 +54,8 @@ Notas:
    - **Python version**: 3.12.
 4. Desplegar. Community Cloud instalará `requirements.txt` (versiones exactas del
    lockfile).
-5. **No se requieren secretos** para V1: el tracking está deshabilitado por
-   defecto (`configs/app.yaml` → `tracking.enabled_default: false`) y la app no
-   contiene código de tracking todavía (Módulo 9).
+5. **No se requieren secretos** para V1: la persistencia de eventos y feedback en
+   MySQL está fuera del alcance actual y la app no contiene código de tracking.
 
 ## 4. Verificación post-despliegue
 
@@ -82,9 +81,8 @@ Notas:
 
 ## 6. Limitaciones del despliegue V1
 
-- El tracking de eventos y feedback (Módulo 9) está deshabilitado; una base MySQL
-  local no es accesible desde Community Cloud. Se activará solo cuando
-  exista una base remota accesible.
+- La persistencia de eventos y feedback en MySQL está **fuera del alcance actual**
+  (ver `docs/roadmap.md`); no se implementa código de tracking.
 - No se entrena ningún modelo en la nube; todo se construye localmente y se
   versiona.
 - El catálogo es la muestra de 114.000 filas del `dataset.csv`; las conclusiones
