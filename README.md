@@ -13,6 +13,12 @@ Proyecto end-to-end de ciencia de datos y machine learning que transforma un cat
 
 **Aplicación desplegada:** [https://music-intelligence-lab.streamlit.app/](https://music-intelligence-lab.streamlit.app/)
 
+## Fuente del dataset
+
+Catálogo musical *Spotify Tracks Dataset* (≈ 114.000 filas) descargado de Kaggle:
+
+[Spotify Tracks Dataset](https://www.kaggle.com/datasets/maharshipandya/-spotify-tracks-dataset/data)
+
 ## Funcionalidad implementada
 
 ### Módulo 1 · Ingesta, auditoría y validación
