@@ -34,8 +34,8 @@ del límite de 100 MB por archivo de GitHub.
 Notas:
 
 - `data/raw/dataset.csv` **no** se versiona; solo viajan los parquet derivados.
-  Los datos derivados se publican bajo la licencia del dataset fuente (CC
-  BY-NC-SA 4.0 en la versión habitual, ver la documentación de la carpeta `data/`).
+  Los datos derivados se publican bajo la licencia del dataset fuente (ODbL 1.0:
+  atribución requerida, ver la documentación de la carpeta `data/`).
 - Los joblibs de experimentos de clasificación no expuestos en la aplicación
   (M0, M2 y C0) no se cargan y permanecen ignorados; M1_A, M1_B y C1 sí se
   versionan porque el laboratorio multietiqueta y el de género dominante los sirven.
