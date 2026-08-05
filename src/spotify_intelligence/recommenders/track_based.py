@@ -91,7 +91,7 @@ class TrackRecommender:
         import json
 
         with open(manifest_path, encoding="utf-8") as f:
-            return json.load(f)
+            return json.load(f)  # type: ignore[no-any-return]
 
     @property
     def feature_columns(self) -> list[str]:
@@ -145,7 +145,7 @@ class TrackRecommender:
         results = results.head(top_n).reset_index(drop=True)
 
         if include_explanations:
-            results["feature_differences"] = self._explain_row(seed_row, results)
+            results["feature_differences"] = self._explain_row(seed_row, results)  # type: ignore[assignment]
         return results
 
     def _reorder_with_affinity(

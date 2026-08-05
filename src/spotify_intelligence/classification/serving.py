@@ -109,7 +109,7 @@ def _read_manifest(artifact_dir: Path) -> dict[str, Any]:
         raise DataContractError(f"Missing manifest: {manifest_path}")
     import json
 
-    return json.loads(manifest_path.read_text(encoding="utf-8"))
+    return json.loads(manifest_path.read_text(encoding="utf-8"))  # type: ignore[no-any-return]
 
 
 def _require_artifact_file(artifact_dir: Path, filename: str) -> Path:
@@ -137,7 +137,7 @@ def load_validation_metrics(
     path = artifact_dir / "metrics_validation.json"
     if not path.exists():
         return None
-    return json.loads(path.read_text(encoding="utf-8"))
+    return json.loads(path.read_text(encoding="utf-8"))  # type: ignore[no-any-return]
 
 
 def _load_encoder(artifact_dir: Path) -> GenreLabelEncoder:
@@ -218,7 +218,7 @@ def select_recording_row(
     frame.index = frame.index.astype(str)
     if str(recording_group_id) not in frame.index:
         raise KeyError(f"recording_group_id not found: {recording_group_id}")
-    return frame.loc[str(recording_group_id)]
+    return frame.loc[str(recording_group_id)]  # type: ignore[return-value]
 
 
 def imputation_values_from_train(

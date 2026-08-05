@@ -116,7 +116,7 @@ def resolve_track(
     frame = frame.set_index("track_id")
     if track_id not in frame.index:
         raise KeyError(f"track_id not found in catalog: {track_id}")
-    return frame.loc[track_id]
+    return frame.loc[track_id]  # type: ignore[return-value]
 
 
 def build_display_rows(

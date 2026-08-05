@@ -50,7 +50,7 @@ def transform_matrix(
     scaler,
 ) -> np.ndarray:
     """Scale a raw feature matrix with an already fitted scaler."""
-    return scaler.transform(matrix)
+    return scaler.transform(matrix)  # type: ignore[no-any-return]
 
 
 def build_eligible_recordings(

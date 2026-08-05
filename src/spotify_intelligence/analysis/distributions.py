@@ -127,4 +127,4 @@ def incomplete_audio_by_genre(
         total="count", incomplete="sum"
     )
     per_genre["share_incomplete"] = per_genre["incomplete"] / per_genre["total"]
-    return per_genre.sort_values("incomplete", ascending=False)
+    return per_genre.sort_values("incomplete", ascending=False)  # type: ignore[no-any-return, call-overload]

@@ -28,7 +28,7 @@ def high_correlation_pairs(
     for i, feature_a in enumerate(columns):
         for feature_b in columns[i + 1 :]:
             value = corr.loc[feature_a, feature_b]
-            if abs(value) >= threshold:
+            if abs(value) >= threshold:  # type: ignore[operator, arg-type]
                 rows.append({"feature_a": feature_a, "feature_b": feature_b, "correlation": value})
     if not rows:
         return pd.DataFrame(columns=["feature_a", "feature_b", "correlation"])

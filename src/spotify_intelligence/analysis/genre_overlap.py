@@ -61,7 +61,7 @@ def top_overlap_pairs(cooc: pd.DataFrame, top_n: int = 20) -> pd.DataFrame:
     rows: list[dict[str, object]] = []
     for i, genre_a in enumerate(genres):
         for genre_b in genres[i + 1 :]:
-            value = int(cooc.loc[genre_a, genre_b])
+            value = int(cooc.loc[genre_a, genre_b])  # type: ignore[arg-type]
             if value > 0:
                 rows.append({"genre_a": genre_a, "genre_b": genre_b, "shared_recordings": value})
     if not rows:
@@ -82,9 +82,10 @@ def full_overlap_pairs(cooc: pd.DataFrame, counts: pd.DataFrame) -> pd.DataFrame
     rows: list[dict[str, object]] = []
     for i, genre_a in enumerate(genres):
         for genre_b in genres[i + 1 :]:
-            shared = int(cooc.loc[genre_a, genre_b])
+            shared = int(cooc.loc[genre_a, genre_b])  # type: ignore[arg-type]
             cap = min(
-                int(counts.loc[genre_a, "recordings"]), int(counts.loc[genre_b, "recordings"])
+                int(counts.loc[genre_a, "recordings"]),  # type: ignore[arg-type]
+                int(counts.loc[genre_b, "recordings"]),  # type: ignore[arg-type]
             )
             if shared > 0 and shared == cap:
                 rows.append(

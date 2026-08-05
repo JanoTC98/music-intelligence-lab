@@ -151,12 +151,12 @@ class PreferenceRecommender:
         if not manifest_path.exists():
             raise ArtifactNotFoundError(f"Missing preference recommender manifest: {manifest_path}")
         with open(manifest_path, encoding="utf-8") as f:
-            return json.load(f)
+            return json.load(f)  # type: ignore[no-any-return]
 
     def _load_ood_reference(self) -> dict[str, Any]:
         path = self.artifact_dir / "ood_reference.json"
         with open(path, encoding="utf-8") as f:
-            return json.load(f)
+            return json.load(f)  # type: ignore[no-any-return]
 
     def recommend(
         self,
@@ -179,7 +179,7 @@ class PreferenceRecommender:
         order = np.argsort(distances, kind="stable")
         distances_sorted = distances[order]
         rows = [int(i) for i in order]
-        rows, distances_sorted = self._apply_filters(rows, distances_sorted, filters)
+        rows, distances_sorted = self._apply_filters(rows, distances_sorted, filters)  # type: ignore[assignment, arg-type]
         if not rows:
             return self._empty_results()
 

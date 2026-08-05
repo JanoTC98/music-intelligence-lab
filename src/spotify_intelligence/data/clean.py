@@ -9,11 +9,11 @@ from spotify_intelligence.data.contracts import load_rules_config
 
 
 def _cleaning_rules(config: dict[str, Any]) -> dict[str, Any]:
-    return config["cleaning"]
+    return config["cleaning"]  # type: ignore[no-any-return]
 
 
 def _incomplete_audio_rules(config: dict[str, Any]) -> dict[str, Any]:
-    return config["incomplete_audio"]
+    return config["incomplete_audio"]  # type: ignore[no-any-return]
 
 
 def clean_records(

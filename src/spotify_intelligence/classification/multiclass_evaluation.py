@@ -34,7 +34,7 @@ def normalized_confusion_matrix(
     cm = confusion_matrix(y_true, y_pred, labels=labels)
     cm = cm.astype(float)
     row_sums = cm.sum(axis=1, keepdims=True)
-    return np.divide(cm, row_sums, out=np.zeros_like(cm), where=row_sums > 0)
+    return np.divide(cm, row_sums, out=np.zeros_like(cm), where=row_sums > 0)  # type: ignore[no-any-return]
 
 
 def most_confused_pairs(

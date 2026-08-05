@@ -123,6 +123,8 @@ def package_source(dry_run: bool = False, version: str | None = None) -> Path:
             continue
         if item.name in (".env", ".gitignore"):
             continue
+        if item.suffix == ".md" and item.parent == root and item.name != "README.md":
+            continue
         if (
             item.name == ".env.example"
             or item.suffix in INCLUDE_EXTENSIONS

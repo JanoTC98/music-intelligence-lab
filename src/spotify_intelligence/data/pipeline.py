@@ -68,7 +68,7 @@ def prepare_data(
     raw = pd.read_csv(dataset_path)
     valid, invalid = clean_records(raw, config_path=config_path)
     valid = add_anomaly_flags(valid, config_path=config_path)
-    valid = normalize_identity_fields(valid, config_path=config_path)
+    valid = normalize_identity_fields(valid, config_path=str(config_path))
 
     if not invalid.empty:
         _write_parquet(invalid, quarantine_dir / "invalid_identity.parquet")

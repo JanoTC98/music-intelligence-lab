@@ -76,7 +76,7 @@ class MultilabelDataset:
 
     @property
     def n_labels(self) -> int:
-        return self.Y.shape[1]
+        return int(self.Y.shape[1])
 
     def to_matrix(self) -> np.ndarray:
         """Return the numeric feature matrix, one-hot included.
