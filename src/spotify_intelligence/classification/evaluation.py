@@ -1,7 +1,7 @@
-"""Multilabel evaluation metrics and experiment manifests (AGENTS.md sección 16.9).
+"""Multilabel evaluation metrics and experiment manifests.
 
 Scores are uncalibrated; every metric name and report explicitly avoids the
-word "probability" unless calibration is proven (sección 16.10).
+word "probability" unless calibration is proven.
 """
 
 from __future__ import annotations
@@ -32,7 +32,7 @@ def evaluate_multilabel(
     scores: np.ndarray,
     labels: np.ndarray,
 ) -> dict[str, Any]:
-    """Compute the sección 16.9 metric set for one evaluation run.
+    """Compute the metric set for one evaluation run.
 
     ``scores`` are the raw uncalibrated model outputs; ``labels`` are the
     thresholded binary predictions. Latency and model size are measured by the
@@ -148,7 +148,7 @@ def build_experiment_manifest(
     experiment_id: str,
     extra: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    """Return a sección 24.4 experiment manifest."""
+    """Return an experiment manifest."""
     manifest: dict[str, Any] = {
         "experiment_id": experiment_id,
         "task": task,

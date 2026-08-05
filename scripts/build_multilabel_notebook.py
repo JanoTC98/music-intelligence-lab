@@ -2,7 +2,7 @@
 
 The notebook exercises the multilabel dataset, frozen grouped splits, the M0
 (frequency) and M1 (OneVsRest logistic) baselines, global threshold tuning on
-validation and the sección 16.9 metric set, reusing code from
+validation and the metric set, reusing code from
 ``spotify_intelligence.classification``. Heavy models (M3/M4) are trained via
 ``scripts/compare_models.py``, not inside the notebook.
 
@@ -36,7 +36,7 @@ def build() -> nbformat.NotebookNode:
             """# 06 · Laboratorio supervisado: clasificación multietiqueta de géneros
 
 **Proyecto:** Spotify Music Intelligence
-**Módulo 6:** Clasificador multietiqueta (AGENTS.md sección 16)
+**Módulo 6:** Clasificador multietiqueta
 **Objetivo:** predecir un conjunto compatible de los 114 géneros a partir de
 características acústicas, sin usar el conjunto de test durante la selección.
 
@@ -101,7 +101,7 @@ print("incomplete:", int(dataset.incomplete_mask.sum()))"""
         md(
             """## Split agrupado y verificación de fuga
 
-Se comprueba que ningún `recording_group_id` aparece en dos conjuntos (sección 3.5)."""
+Se comprueba que ningún `recording_group_id` aparece en dos conjuntos."""
         )
     )
     cells.append(
@@ -118,7 +118,7 @@ print("OK: intersecciones vacías entre train/validation/test")"""
             """## Baseline M0 · Frecuencia de etiquetas
 
 No usa características; predice la prevalencia observada de cada etiqueta en
-train. El umbral global se optimiza en validación (sección 16.8)."""
+train. El umbral global se optimiza en validación."""
         )
     )
     cells.append(
@@ -146,7 +146,7 @@ ev.evaluate_multilabel(data.Y_val, scores_m0, pred_m0["labels"])"""
         md(
             """## Baseline M1 · One-vs-Rest Logistic Regression
 
-Configuración inicial sección 16.6: `liblinear`, `C=1.0`, `max_iter=2000`,
+Configuración inicial `liblinear`, `C=1.0`, `max_iter=2000`,
 `class_weight=balanced`, wrapper `n_jobs=-1`."""
         )
     )
@@ -174,7 +174,7 @@ metrics_m1 = ev.evaluate_multilabel(data.Y_val, scores_m1, pred_m1["labels"])
             """## Ejemplo de predicción Top-5
 
 La aplicación muestra siempre Top-5. Si ninguna etiqueta supera el umbral, se
-muestra el top-1 con un aviso (sección 16.8)."""
+muestra el top-1 con un aviso."""
         )
     )
     cells.append(
@@ -190,11 +190,11 @@ for row in topk:
         md(
             """## Limitaciones
 
-- Las puntuaciones no calibradas **no** se llaman probabilidades (sección 16.10).
+- Las puntuaciones no calibradas **no** se llaman probabilidades.
 - El test congelado se usa solo en la evaluación final autorizada
   (`scripts/evaluate_final_model.py --use-test`).
 - La prevalencia real de géneros de Spotify no puede inferirse de esta muestra
-  balanceada (sección 2.3)."""
+  balanceada."""
         )
     )
 

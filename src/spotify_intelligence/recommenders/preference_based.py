@@ -1,4 +1,4 @@
-"""Content-based preference recommender (AGENTS.md sección 15).
+"""Content-based preference recommender.
 
 Ranking uses a weighted Euclidean distance over scaled features. Presets come
 from ``configs/presets.yaml`` and remain editable without touching Python.
@@ -43,7 +43,7 @@ def weighted_euclidean_distance(
     query: np.ndarray,
     weights: np.ndarray,
 ) -> float:
-    """Weighted Euclidean distance over scaled variables (sección 15.6).
+    """Weighted Euclidean distance over scaled variables.
 
     ``d = sqrt(sum(w_i * (x_i - q_i)^2) / sum(w_i))``. All arrays must be
     one-dimensional and share the same length.

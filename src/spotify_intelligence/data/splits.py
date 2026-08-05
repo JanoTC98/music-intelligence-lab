@@ -1,7 +1,7 @@
-"""Grouped train/validation/test splits for the classification modules (§16.4).
+"""Grouped train/validation/test splits for the classification modules.
 
 Splits are performed on ``recording_group_id`` so a full group belongs to a
-single set (AGENTS.md §3.5). Multiple candidate splits are generated with
+single set. Multiple candidate splits are generated with
 shuffled seeds, empty intersections are verified, and the candidate with the
 smallest label-prevalence deviation is selected. The test split is frozen.
 """
@@ -149,7 +149,7 @@ def create_grouped_splits(
 
 
 def split_sha256(split_map: dict[str, list[str]]) -> str:
-    """Return a stable hash of the split assignment (§16.4 freeze test)."""
+    """Return a stable hash of the split assignment (freeze test)."""
     payload = json.dumps(
         {split: sorted(split_map[split]) for split in SPLIT_NAMES},
         sort_keys=True,

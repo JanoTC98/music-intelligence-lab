@@ -23,7 +23,7 @@ def evaluate_track_recommender(
     perturbation_std: float = 0.01,
     n_stability_samples: int = 20,
 ) -> dict[str, Any]:
-    """Evaluate the mandatory sección 14.11 metrics over a sample of seeds.
+    """Evaluate the official evaluation metrics over a sample of seeds.
 
     Uses the catalog already embedded in the recommender artifacts, so the
     metric values reflect the production index.

@@ -1,4 +1,4 @@
-"""Audio feature engineering for the classification module (AGENTS.md sección 16.3).
+"""Audio feature engineering for the classification module.
 
 Engineered features operate on the processed ``recordings`` catalog:
 
@@ -72,7 +72,7 @@ def incomplete_audio_indicator(df: pd.DataFrame) -> np.ndarray:
     """Return a binary indicator of the confirmed incomplete-analysis pattern.
 
     The pattern is ``tempo = danceability = speechiness = valence =
-    time_signature = 0`` (sección 4.1). The stored ``audio_analysis_incomplete`` flag
+    time_signature = 0``. The stored ``audio_analysis_incomplete`` flag
     is preferred when available; this helper recomputes it from raw columns.
     """
     return (

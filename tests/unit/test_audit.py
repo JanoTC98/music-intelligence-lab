@@ -15,7 +15,7 @@ def test_compute_file_hash():
 
 
 def test_raw_dataset_hash_regression():
-    """The raw dataset is immutable (sección 12); its SHA-256 is a regression anchor."""
+    """The raw dataset is immutable; its SHA-256 is a regression anchor."""
     expected = "b202fa49909b2d5cef71a04b1d21243cfeb36414535f2ca9272aa646721177bd"
     assert compute_file_hash("data/raw/dataset.csv") == expected
 
@@ -41,7 +41,7 @@ def test_audit_dataset_writes_json():
         assert loaded["raw_rows"] == 114000
 
 
-def test_audit_numbers_match_agents():
+def test_audit_numbers_match_regression():
     df = pd.read_csv("data/raw/dataset.csv")
     report = audit_dataset(df, "data/raw/dataset.csv")
 

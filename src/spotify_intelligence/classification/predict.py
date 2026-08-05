@@ -1,4 +1,4 @@
-"""Prediction helpers for the multilabel classifier (AGENTS.md sección 16.8).
+"""Prediction helpers for the multilabel classifier.
 
 The application always shows Top-5 genres. If no label surpasses the tuned
 global threshold, the top-1 genre is returned with a ``below_threshold`` flag.

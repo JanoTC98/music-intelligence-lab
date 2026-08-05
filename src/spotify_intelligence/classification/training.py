@@ -1,4 +1,4 @@
-"""Shared training-pipeline helpers for the multilabel module (sección 16.4/sección 16.5).
+"""Shared training-pipeline helpers for the multilabel module.
 
 Centralizes data preparation so that the training script, the model
 comparison script and the exploration notebook use identical transformations.
@@ -64,7 +64,7 @@ def subset_dataset(
 
 
 def train_imputation_values(train_dataset: MultilabelDataset) -> dict[str, float]:
-    """Compute train-only medians for the incomplete-audio pattern (sección 16.5B)."""
+    """Compute train-only medians for the incomplete-audio pattern."""
     complete = train_dataset.X[~train_dataset.incomplete_mask]
     return {col: float(complete[col].median()) for col in INCOMPLETE_AUDIO_COLUMNS}
 
@@ -187,7 +187,7 @@ class MulticlassTrainingData:
     """Prepared, scaled matrices for the multiclass (dominant genre) task.
 
     The target ``y`` is a 1D array of genre indices into the canonical
-    114-genre encoder, built from the single-label subset (sección 17.1) under
+    114-genre encoder, built from the single-label subset under
     experiment A (incomplete audio excluded).
     """
 

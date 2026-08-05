@@ -1,4 +1,4 @@
-"""Multilabel classification models (AGENTS.md sección 16.6)."""
+"""Multilabel classification models."""
 
 from __future__ import annotations
 
@@ -71,7 +71,7 @@ class ClassifierChainEnsemble:
     """M2: an ensemble of ClassifierChain models with averaged scores.
 
     Three chains are trained with ``order="random"`` and seeds ``42, 43, 44``
-    (sección 16.6). Scores are averaged for comparison; the prediction is derived
+    Scores are averaged for comparison; the prediction is derived
     from the averaged score matrix. Order dependence is documented as an
     experimental limitation.
     """
@@ -108,7 +108,7 @@ def _build_random_forest(params: dict[str, Any]) -> RandomForestClassifier:
 
 
 def build_model(model_id: str, params: dict[str, Any]) -> Any:
-    """Instantiate a multilabel model by its AGENTS.md id (M0..M5)."""
+    """Instantiate a multilabel model by its id (M0..M5)."""
     if model_id not in MODEL_IDS:
         raise ValueError(f"Unknown model id: {model_id}")
     key = MODEL_IDS[model_id]

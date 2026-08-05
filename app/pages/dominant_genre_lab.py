@@ -1,4 +1,4 @@
-"""Dominant genre lab page (AGENTS.md sección 17)."""
+"""Dominant genre lab page."""
 
 from __future__ import annotations
 
@@ -78,11 +78,11 @@ def render() -> None:
 
         messages.info_note(
             "El género estimado no reemplaza las etiquetas originales de una "
-            "canción multigénero (sección 17.5). Las puntuaciones no están calibradas."
+            "canción multigénero. Las puntuaciones no están calibradas."
         )
         messages.warn_note(
             "Modelo experimental: con solo 18 características acústicas la "
-            "separación entre géneros es limitada (sección 30), por lo que el género "
+            "separación entre géneros es limitada, por lo que el género "
             "dominante estimado puede no coincidir con el género real de la canción."
         )
 

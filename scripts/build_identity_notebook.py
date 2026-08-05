@@ -51,7 +51,7 @@ La huella exacta combina `track_name_normalized`, `artists_normalized` y 14
 valores de audio (sin redondeo) y se serializa como SHA-256:
 `recording_group_id` de 64 caracteres hexadecimales.
 
-Reglas clave (sección 3 de AGENTS.md):
+Reglas clave:
 
 - No se reescribe ningún `track_id`.
 - La agrupación exacta es conservadora: no elimina `live`, `remix`, etc.,
@@ -176,7 +176,7 @@ equivalentes; solo que la huella exacta coincide."""
         md(
             """## 1.3 ¿Qué track representa a cada grupo?
 
-**Método:** comprobación de la regla sección 9.4 de AGENTS.md: mayor `popularity_median`
+**Método:** comprobación de la regla: mayor `popularity_median`
 y, en empate, menor `track_id` lexicográfico."""
         )
     )
@@ -295,7 +295,7 @@ pd.cut(acoustic["acoustic_similarity"], bins=[0.98, 0.99, 0.995, 0.999, 1.001]).
 media es 0,987.
 
 **Limitación:** la similaridad coseno no es una probabilidad de duplicidad ni de
-gusto (sección 24 y sección 30 de AGENTS.md). Un par puede ser muy similar acústicamente y ser
+gusto. Un par puede ser muy similar acústicamente y ser
 una grabación distinta (p. ej. versión o remezcla)."""
         )
     )

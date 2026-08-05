@@ -17,7 +17,6 @@
 ## En curso
 
 - Documentación detallada por dominio (`docs/spec/`).
-- Agentes y comandos de OpenCode (`.opencode/`).
 - Proceso de empaquetado limpio (`scripts/package_source.py`).
 
 ## Pendiente

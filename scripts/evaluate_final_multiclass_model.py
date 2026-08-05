@@ -1,10 +1,10 @@
-"""Evaluate the final multiclass model once on the frozen test split (sección 24.4).
+"""Evaluate the final multiclass model once on the frozen test split.
 
 Usage:
     uv run python scripts/evaluate_final_multiclass_model.py --artifact-dir models/classifier/multiclass/<id> --use-test
 
 The test split is used ONLY when ``--use-test`` is passed explicitly, and only
-once, after the model is selected (sección 17.4, sección 17.5). Without the flag the script
+once, after the model is selected. Without the flag the script
 refuses to run.
 """
 
@@ -68,7 +68,7 @@ def main() -> None:
     if not args.use_test:
         raise SystemExit(
             "Refusing to use the test split. Re-run with --use-test only for the "
-            "one-time final evaluation after model selection (sección 17.4)."
+            "one-time final evaluation after model selection."
         )
 
     artifact_dir = args.artifact_dir

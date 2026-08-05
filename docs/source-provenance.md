@@ -6,7 +6,6 @@
 - `configs/*.yaml` — Reglas y parámetros de producto/modelado.
 - `pyproject.toml` y `uv.lock` — Dependencias y versiones resueltas.
 - Código, pruebas y artefactos versionados en el repositorio.
-- Historial archivado en `docs/archive/` únicamente como antecedente.
 
 ## Fuentes históricas no verificables
 

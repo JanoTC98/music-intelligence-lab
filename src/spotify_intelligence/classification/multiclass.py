@@ -1,10 +1,10 @@
-"""Multiclass (dominant genre) classification models (AGENTS.md sección 17).
+"""Multiclass (dominant genre) classification models.
 
 Predicts a single dominant genre from the primary audio features. The target
 ``y`` is the genre index into the canonical 114-genre encoder; scikit-learn
 models learn a dense ``classes_`` subset (only the classes present in train).
 
-Scores are uncalibrated; they are never called probabilities (sección 16.10).
+Scores are uncalibrated; they are never called probabilities.
 """
 
 from __future__ import annotations
@@ -77,7 +77,7 @@ def _build_random_forest(params: dict[str, Any]) -> RandomForestClassifier:
 
 
 def build_model(model_id: str, params: dict[str, Any]) -> Any:
-    """Instantiate a multiclass model by its AGENTS.md id (C0..C4)."""
+    """Instantiate a multiclass model by its id (C0..C4)."""
     if model_id not in MODEL_IDS:
         raise ValueError(f"Unknown model id: {model_id}")
     key = MODEL_IDS[model_id]

@@ -1,19 +1,19 @@
 # Despliegue V1 — Streamlit Community Cloud
 
-> Documento operativo del **Módulo 4 — Despliegue V1** (AGENTS.md sección 27) y sección 18.6.
+> Documento operativo del **Módulo 4 — Despliegue V1**.
 > Alcance: recomendador por canción (V1). La aplicación carga artefactos; nunca
-> entrena en la nube (sección 18.4).
+> entrena en la nube.
 
 ## 1. Requisitos previos
 
 - Repositorio en GitHub con la rama `main` actualizada.
-- Artefactos generados localmente y versionados (ver sección 2).
-- `requirements.txt` exportado desde `uv.lock` (ya versionado, sección 6.2).
+- Artefactos generados localmente y versionados.
+- `requirements.txt` exportado desde `uv.lock` (ya versionado).
 - `.streamlit/config.toml` con `headless = true` (ya versionado).
 
 ## 2. Artefactos necesarios y decisión de versionado
 
-**Decisión tomada: Opción A — versionar artefactos** (sección 26.4, aprobada por el
+**Decisión tomada: Opción A — versionar artefactos** (aprobada por el
 propietario). Se versionan los datos procesados y los artefactos de producción
 que la aplicación carga; los experimentos de clasificación y el CSV crudo
 permanecen fuera de Git.
@@ -35,7 +35,7 @@ Notas:
 
 - `data/raw/dataset.csv` **no** se versiona; solo viajan los parquet derivados.
   Los datos derivados se publican bajo la licencia del dataset fuente (CC
-  BY-NC-SA 4.0 en la versión habitual, ver `data/README.md`).
+  BY-NC-SA 4.0 en la versión habitual, ver la documentación de la carpeta `data/`).
 - Los joblibs de experimentos de clasificación no expuestos en la aplicación
   (M0, M2 y C0) no se cargan y permanecen ignorados; M1_A, M1_B y C1 sí se
   versionan porque el laboratorio multietiqueta y el de género dominante los sirven.
@@ -44,7 +44,7 @@ Notas:
 
 ## 3. Pasos en Streamlit Community Cloud
 
-1. Publicar la rama `main` en GitHub (responsabilidad del propietario, sección 26.5).
+1. Publicar la rama `main` en GitHub (responsabilidad del propietario).
 2. Entrar en <https://share.streamlit.io> y crear una nueva app conectada al
    repositorio.
 3. Configurar:
@@ -53,7 +53,7 @@ Notas:
    - **Main file path**: `streamlit_app.py`.
    - **Python version**: 3.12.
 4. Desplegar. Community Cloud instalará `requirements.txt` (versiones exactas del
-   lockfile, sección 6.2).
+   lockfile).
 5. **No se requieren secretos** para V1: el tracking está deshabilitado por
    defecto (`configs/app.yaml` → `tracking.enabled_default: false`) y la app no
    contiene código de tracking todavía (Módulo 9).
@@ -63,7 +63,7 @@ Notas:
 - Página *Inicio* carga sin errores.
 - *Recomendar por canción*: buscar una canción, seleccionarla y obtener el Top-N.
   La página incluye el toggle experimental *"Priorizar canciones del mismo género de
-  la semilla"* (afinidad de género, sección 30), desactivado por defecto.
+  la semilla"* (afinidad de género), desactivado por defecto.
 - *Recomendar por preferencias*: un preset produce resultados.
 - *Laboratorios de género*: muestran puntuaciones de los modelos versionados.
 - *Auditoría y catálogo*: muestra el reporte `data_quality_report.json`.
@@ -83,9 +83,9 @@ Notas:
 ## 6. Limitaciones del despliegue V1
 
 - El tracking de eventos y feedback (Módulo 9) está deshabilitado; una base MySQL
-  local no es accesible desde Community Cloud (sección 18.6). Se activará solo cuando
+  local no es accesible desde Community Cloud. Se activará solo cuando
   exista una base remota accesible.
 - No se entrena ningún modelo en la nube; todo se construye localmente y se
   versiona.
 - El catálogo es la muestra de 114.000 filas del `dataset.csv`; las conclusiones
-  no representan la prevalencia real de géneros en Spotify (sección 2.3).
+  no representan la prevalencia real de géneros en Spotify.

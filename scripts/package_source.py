@@ -1,7 +1,7 @@
 """Create a clean source distribution ZIP under dist/.
 
 Excludes Git metadata, virtual environments, caches, raw data,
-processed data, models, reports, and secret files.
+processed data, models, reports, runtime tool directories and secret files.
 """
 
 from __future__ import annotations
@@ -15,10 +15,11 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
+HIDDEN_ROOT_ALLOWLIST = {".devcontainer"}
+
 EXCLUDE_PATTERNS = [
     ".git/",
     ".venv/",
-    ".opencode/node_modules/",
     ".idea/",
     ".pytest_cache/",
     ".ruff_cache/",
@@ -32,7 +33,6 @@ EXCLUDE_PATTERNS = [
     "models/",
     "reports/figures/",
     "dist/",
-    "docs/archive/",
 ]
 
 SECRET_PATTERNS = [
@@ -63,7 +63,6 @@ INCLUDE_EXTENSIONS = {
 }
 
 INCLUDE_FILES = {
-    "AGENTS.md",
     "README.md",
     "pyproject.toml",
     "uv.lock",
@@ -74,6 +73,10 @@ INCLUDE_FILES = {
 def _should_exclude(path: Path, root: Path) -> bool:
     rel = path.resolve().relative_to(root.resolve())
     rel_str = str(rel).replace("\\", "/")
+
+    top = rel_str.split("/", 1)[0]
+    if top.startswith(".") and top not in HIDDEN_ROOT_ALLOWLIST and (root / top).is_dir():
+        return True
 
     for pattern in EXCLUDE_PATTERNS:
         if pattern.endswith("/"):

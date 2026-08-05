@@ -16,6 +16,9 @@ htmlcov/
 # IDE
 .idea/
 
+# Agent tooling
+.opencode/
+
 # Streamlit secrets
 .streamlit/secrets.toml
 
@@ -39,7 +42,7 @@ models/**/*.joblib
 models/**/*.npy
 models/**/*.npz
 models/**/*.pkl
-# Production artifacts versioned for deployment (AGENTS.md sección 27, Opción A).
+# Production artifacts versioned for deployment (Opción A).
 # Retraining keeps timestamps; globs match the serving bundle regardless.
 !models/recommender/v1/*.joblib
 !models/recommender/v1/*.npy

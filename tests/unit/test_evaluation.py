@@ -31,7 +31,7 @@ def test_evaluation_metrics_zero_violations(recommender):
     assert report["filter_compliance_pct"] == 100.0
     assert (
         report["mean_similarity"] is not None and -1.0 <= report["mean_similarity"] <= 1.0
-    )  # similitud coseno, no una probabilidad (sección 14.10)
+    )  # similitud coseno, no una probabilidad
     assert report["latency_ms_p50"] >= 0
 
 

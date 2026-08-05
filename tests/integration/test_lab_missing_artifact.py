@@ -1,4 +1,4 @@
-"""Regression test: a missing classifier artifact renders sección 18.4, no traceback.
+"""Regression test: a missing classifier artifact renders, no traceback.
 
 The multilabel lab page offers the experimental B variant (imputation). If the
 bundle is absent on disk (e.g. a stale or partial deploy), the page must show
@@ -50,7 +50,7 @@ def hidden_m1_bundle() -> None:
 def test_multilabel_variant_b_shows_missing_artifact_message(
     hidden_m1_bundle: None,
 ) -> None:
-    """Selecting variant B with a missing bundle shows the sección 18.4 message."""
+    """Selecting variant B with a missing bundle shows the message."""
     at = AppTest.from_file(str(APP_PATH), default_timeout=180)
     at.run()
     at.switch_page("app/pages/multilabel_genre_lab.py")

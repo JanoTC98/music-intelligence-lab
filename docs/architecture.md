@@ -34,5 +34,5 @@
 
 ## Planificado
 
-- Módulos futuros identificados en `docs/roadmap.md`.
+- Módulos futuros identificados en el roadmap del proyecto.
 - No se crean archivos Python vacíos únicamente para hacer coincidir el árbol histórico.

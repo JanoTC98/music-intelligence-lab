@@ -1,7 +1,7 @@
-"""Catalog search and seed resolution for the web application (AGENTS.md sección 14.6).
+"""Catalog search and seed resolution for the web application.
 
-The application needs a disambiguated lookup of a track by name and artist
-(sección 18.5). This module searches the processed ``tracks.parquet`` catalog with a
+The application needs a disambiguated lookup of a track by name and artist.
+This module searches the processed ``tracks.parquet`` catalog with a
 flexible, normalized query and returns candidate rows the user can confirm
 before any recommendation is computed.
 

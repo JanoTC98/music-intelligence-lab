@@ -1,6 +1,6 @@
 """Generate notebooks/07_multiclass_classifier.ipynb.
 
-The notebook exercises the single-label multiclass dataset (AGENTS.md sección 17),
+The notebook exercises the single-label multiclass dataset,
 the frozen grouped splits, the C0 (frequent class) baseline and the approved
 final model C1 (logistic) loaded from its versioned artifact. C2/C3 (tree
 ensembles) are trained and compared via ``scripts/compare_multiclass_models.py``
@@ -37,13 +37,13 @@ def build() -> nbformat.NotebookNode:
             """# 07 · Clasificador multiclase: género acústico dominante
 
 **Proyecto:** Spotify Music Intelligence
-**Módulo 7:** Clasificador multiclase secundario (AGENTS.md sección 17)
+**Módulo 7:** Clasificador multiclase secundario
 **Objetivo:** estimar un género acústico dominante entre 114 clases usando
 únicamente grabaciones con una sola etiqueta, sin usar el test durante la
 selección de modelo.
 
-La predicción no reemplaza las etiquetas originales de canciones multigénero
-(sección 17.5). El split agrupado congelado (70/15/15) está en
+La predicción no reemplaza las etiquetas originales de canciones multigénero.
+El split agrupado congelado (70/15/15) está en
 `data/processed/splits.parquet`. Los árboles C2/C3 se compararon con
 `scripts/compare_multiclass_models.py`; el modelo final aprobado es C1."""
         )
@@ -111,8 +111,8 @@ print(
         md(
             """## Dataset de grabaciones monoetiqueta y split sin fuga
 
-Solo se usan grabaciones con exactamente un género (sección 17.1). Se verifica que
-ningún `recording_group_id` aparece en dos conjuntos (sección 3.5)."""
+Solo se usan grabaciones con exactamente un género. Se verifica que
+ningún `recording_group_id` aparece en dos conjuntos."""
         )
     )
     cells.append(
@@ -190,7 +190,7 @@ metrics = evaluate_multiclass(data.y_val, full, class_names)
 
     cells.append(
         md(
-            """## Evaluación exploratoria sobre grabaciones multigénero (sección 17.5)
+            """## Evaluación exploratoria sobre grabaciones multigénero
 
 C1 estima un único género dominante. Se evalúa con `Hit@1`, `Hit@3` y
 `Recall@5` sobre filas de validación que tienen más de una etiqueta original."""
@@ -214,13 +214,13 @@ dominant_genre_exploratory(Y_mg, full_mg, class_names)"""
         md(
             """## Limitaciones
 
-- Es un laboratorio experimental (sección 17); la predicción **no** reemplaza las
+- Es un laboratorio experimental; la predicción **no** reemplaza las
   etiquetas originales de canciones multigénero.
 - El test congelado se usa solo en la evaluación final autorizada
   (`scripts/evaluate_final_multiclass_model.py --use-test`).
-- Las puntuaciones no calibradas **no** se llaman probabilidades (sección 16.10).
+- Las puntuaciones no calibradas **no** se llaman probabilidades.
 - La muestra es balanceada por bloque (1.000 filas por género); no permite
-  inferir prevalencia real de Spotify (sección 2.3)."""
+  inferir prevalencia real de Spotify."""
         )
     )
 

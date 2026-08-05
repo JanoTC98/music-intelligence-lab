@@ -1,8 +1,8 @@
 """Lightweight checks to prevent documentation/config regressions.
 
-Verifies that AGENTS.md does not embed stale configuration blocks or
-incorrect parameter values, and that config files referenced in
-documentation actually exist.
+Verifies that config files referenced in documentation actually exist and
+that versioned regression blocks keep their required keys and coherent
+reference counts.
 """
 
 from __future__ import annotations
@@ -12,29 +12,13 @@ import pathlib
 import yaml
 
 PROJECT_ROOT = pathlib.Path(__file__).resolve().parent.parent.parent
-AGENTS_PATH = PROJECT_ROOT / "AGENTS.md"
 CONFIGS_DIR = PROJECT_ROOT / "configs"
-
-
-def _read_agents() -> str:
-    return AGENTS_PATH.read_text(encoding="utf-8")
 
 
 def _load_yaml(name: str) -> dict:
     path = CONFIGS_DIR / name
     with open(path, encoding="utf-8") as f:
         return yaml.safe_load(f)
-
-
-class TestAgentsNoConfigBlocks:
-    def test_no_model_parameters_block(self):
-        content = _read_agents()
-        assert "## 32.5 configs/model_parameters.yaml" not in content
-
-    def test_no_n_estimators_500_for_c2_c3(self):
-        content = _read_agents()
-        assert "n_estimators = 500" not in content
-        assert "n_estimators: 500" not in content
 
 
 class TestConfigPathsExist:

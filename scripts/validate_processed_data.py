@@ -1,4 +1,4 @@
-"""Validate the processed data artifacts (AGENTS.md sección 25.1, sección 9).
+"""Validate the processed data artifacts.
 
 Checks the contracts of the generated Parquet tables without modifying them.
 Exits with a non-zero status and a clear message on the first failure.
@@ -100,15 +100,15 @@ def main() -> None:
     genre_catalog = _read("genre_catalog.parquet")
 
     if not tracks["track_id"].is_unique:
-        _fail("tracks.track_id no es �nico")
+        _fail("tracks.track_id no es único")
     if not recordings["recording_group_id"].is_unique:
-        _fail("recordings.recording_group_id no es �nico")
+        _fail("recordings.recording_group_id no es único")
     if tracks["recording_group_id"].isna().any():
         _fail("tracks.recording_group_id tiene nulos")
     if len(recordings) != expected_recording_groups:
         _fail(
             f"recordings tiene {len(recordings)} filas; "
-            f"esperado {expected_recording_groups} (regresi�n)"
+            f"esperado {expected_recording_groups} (regresión)"
         )
 
     missing = set(TRACKS_REQUIRED_COLUMNS) - set(tracks.columns)
@@ -120,12 +120,12 @@ def main() -> None:
         _fail(f"track_ids sin grupo en recording_tracks: {len(orphans)}")
 
     if len(genre_catalog) != EXPECTED_GENRES:
-        _fail(f"genre_catalog tiene {len(genre_catalog)} g�neros; esperado {EXPECTED_GENRES}")
+        _fail(f"genre_catalog tiene {len(genre_catalog)} géneros; esperado {EXPECTED_GENRES}")
 
     track_genres = _read("track_genres.parquet")
     duplicated = track_genres.duplicated(subset=["track_id", "track_genre"]).sum()
     if duplicated:
-        _fail(f"track_genres tiene {duplicated} duplicados track_id-g�nero")
+        _fail(f"track_genres tiene {duplicated} duplicados track_id-género")
 
     if not (QUARANTINE_DIR / "invalid_identity.parquet").exists():
         _fail("No existe data/quarantine/invalid_identity.parquet")

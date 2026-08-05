@@ -1,11 +1,11 @@
-"""Exploratory analysis of track-recommender genre coherence (AGENTS.md sección 30).
+"""Exploratory analysis of track-recommender genre coherence.
 
 Read-only experiment: it never retrains and never writes to ``configs/`` or the
 model artifacts. It uses the stored recommender artifacts and measures, for a
 sample of seeds, how often the Top-10 shares at least one genre with the seed
 (``genre_coherence@10``) under three variants:
 
-1. baseline: current production behavior (equal-weight cosine, sección 14.4 R1).
+1. baseline: current production behavior (equal-weight cosine, R1).
 2. weighted: weighted Euclidean over the standardized matrix, emphasizing
    tempo, loudness, energy, valence and danceability.
 3. genre_affinity: baseline neighbors (Top-100 by cosine) re-ranked so that
@@ -164,7 +164,7 @@ def _variant_report(
 
     ``internal_diversity_similarity_std`` and ``unique_artists_per_list`` follow
     the official evaluation methodology (mean of per-list std and of per-list
-    unique-artist proportion, sección 14.11).
+    unique-artist proportion).
     """
     block: dict[str, object] = {
         "genre_coherence_at_10": _distribution(coh),

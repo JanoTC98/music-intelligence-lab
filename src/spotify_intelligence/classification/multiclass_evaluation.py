@@ -1,4 +1,4 @@
-"""Multiclass (dominant genre) evaluation metrics (AGENTS.md sección 17.4, sección 17.5).
+"""Multiclass (dominant genre) evaluation metrics.
 
 All score matrices are in the full 114-genre space (see
 ``expand_to_full_label_space``). ``y_true`` is a 1D array of genre indices
@@ -65,7 +65,7 @@ def evaluate_multiclass(
     scores: np.ndarray,
     class_names: list[str],
 ) -> dict[str, Any]:
-    """Compute the sección 17.4 metric set for one evaluation run.
+    """Compute the metric set for one evaluation run.
 
     ``scores`` must have one column per ``class_names`` entry (full label
     space). Latency, size and training time are measured by the scripts.
@@ -101,7 +101,7 @@ def dominant_genre_exploratory(
     k_hit3: int = 3,
     k_recall5: int = 5,
 ) -> dict[str, Any]:
-    """Exploratory evaluation on multi-genre rows (sección 17.5).
+    """Exploratory evaluation on multi-genre rows.
 
     Applies a multiclass score matrix to rows whose original label set has
     more than one genre and reports Hit@1, Hit@3 and Recall@5 against that

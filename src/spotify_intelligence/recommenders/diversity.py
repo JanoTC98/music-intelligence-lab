@@ -1,4 +1,4 @@
-"""Optional MMR diversity reranking (AGENTS.md sección 15.9).
+"""Optional MMR diversity reranking.
 
 Score = lambda * relevance - (1 - lambda) * similarity_to_selected.
 """

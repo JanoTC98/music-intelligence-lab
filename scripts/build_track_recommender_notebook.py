@@ -1,7 +1,7 @@
 """Generate notebooks/04_track_recommender_experiments.ipynb.
 
 The notebook exercises the four mandatory recommender configurations
-(R1..R4 from AGENTS.md sección 14.4) using reusable code from
+(R1..R4) using reusable code from
 ``spotify_intelligence.recommenders.experiments``.
 
 Usage:
@@ -44,8 +44,8 @@ def build() -> nbformat.NotebookNode:
 
 **Proyecto:** Spotify Music Intelligence
 **Módulo 4:** Recomendador por canción
-**Objetivo:** comparar las cuatro configuraciones obligatorias (R1–R4,
-AGENTS.md sección 14.4) sobre semillas manuales sin usar test y sin modificar datos.
+**Objetivo:** comparar las cuatro configuraciones obligatorias (R1–R4)
+sobre semillas manuales sin usar test y sin modificar datos.
 
 | ID | Escalador | Distancia |
 |---|---|---|
@@ -240,8 +240,7 @@ automática) usa una muestra más amplia. `similarity` no es una probabilidad.""
 **Resumen:** R1 (StandardScaler + coseno, brute) reproduce el baseline
 especificado y muestra las similitudes más altas en las inspecciones manuales.
 R2–R4 quedan documentados como alternativas. La configuración inicial de
-producción se fija en **R1** a la espera de la aprobación del propietario
-(AGENTS.md sección 7 y sección 30).
+producción se fija en **R1** a la espera de la aprobación del propietario.
 
 Limitaciones: las semillas son inspección manual, no ground truth; la cobertura
 completa y la latencia p50/p95 se miden en la evaluación offline."""

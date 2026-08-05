@@ -48,7 +48,7 @@ Fuentes de datos (todas bajo `data/processed/`):
 - `recordings.parquet` — una fila por `recording_group_id` (83.881).
 - `recording_genres.parquet` — relación grabación–género (103.468 filas).
 
-Limitaciones obligatorias (sección 2.3 de AGENTS.md):
+Limitaciones obligatorias:
 
 - El CSV original contiene 114 bloques artificiales de 1.000 filas. **No permite
   estimar la prevalencia real de géneros en Spotify**.
@@ -159,7 +159,7 @@ errores de recogida."""
 
 **Método:** conteo de pistas cortas (< 60 s), largas (> 10 min) y normales a nivel
 de `track_id`, más histograma de duración en minutos. Los umbrales provienen de
-`configs/data_rules.yaml` (sección 4.2 de AGENTS.md)."""
+`configs/data_rules.yaml`."""
         )
     )
     cells.append(
@@ -251,7 +251,7 @@ casos (≈ 87 %) y un 13,3 % de sus grabaciones es incompleto. El resto se repar
 en pequeñas cantidades (`iranian`, `guitar`, `ambient`, `world-music`, `opera`,
 `jazz`, `romance`, `show-tunes`).
 
-**Limitación:** el patrón de análisis incompleto (sección 4.1) se conserva en datos
+**Limitación:** el patrón de análisis incompleto se conserva en datos
 procesados y se excluye de recomendadores y del baseline de clasificación."""
         )
     )
@@ -339,8 +339,8 @@ bajo. `energy` es, por tanto, la variable más solapada con otras dos, pero la
 redundancia no es total.
 
 **Limitación:** una alta correlación no implica redundancia inútil para todas las
-distancias; el impacto debe medirse con experimentos de recomendación (sección 30 de
-AGENTS.md), no decidirse solo con EDA."""
+distancias; el impacto debe medirse con experimentos de recomendación,
+no decidirse solo con EDA."""
         )
     )
 
@@ -370,7 +370,7 @@ desplaza las medias: el mayor cambio relativo está en `loudness` (−0,07 dB) y
 también permanecen casi idénticas. La selección del track representativo por
 popularidad no introduce un sesgo relevante en las estadísticas agregadas.
 
-**Limitación:** `recordings` usa el track representativo por grupo (sección 9.4), por lo
+**Limitación:** `recordings` usa el track representativo por grupo, por lo
 que la comparación refleja la regla de selección, no una media de todas las
 versiones."""
         )
@@ -454,7 +454,7 @@ separabilidad nula entre ambas clases y confusión esperada entre géneros afine
 
 **Limitación:** el solapamiento total de etiquetas degrada la separabilidad de esas
 clases en el clasificador multietiqueta; debe documentarse, no corregirse
-automáticamente (sección 5.4 de AGENTS.md)."""
+automáticamente."""
         )
     )
 

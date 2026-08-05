@@ -39,7 +39,7 @@ def render_recommendation_filters(
     prefix: str = "filters",
     include_different_artist: bool = True,
 ) -> RecommendationFilters:
-    """Render optional recommendation filters (AGENTS.md sección 14.8).
+    """Render optional recommendation filters.
 
     Every filter is inactive by default; the widget state always matches the
     approved configuration values from ``recommender_features.yaml``. The
@@ -110,7 +110,7 @@ def render_preference_profile(
     *,
     prefix: str = "profile",
 ) -> PreferenceProfile:
-    """Render preset + editable sliders and weights (sección 15.2/sección 15.5).
+    """Render preset + editable sliders and weights.
 
     The returned profile always validates: at least one weight is non-zero and
     every value stays inside its approved range.
@@ -175,7 +175,7 @@ def render_track_search(
     """Render a disambiguated track search and return the selected row.
 
     Returns ``None`` while no query has produced a confirmed selection. The
-    caller decides what to render next (AGENTS.md sección 18.5 "búsqueda
+    caller decides what to render next ("búsqueda
     desambiguada por canción y artista").
     """
     query = st.text_input(label, key=f"{prefix}_query")

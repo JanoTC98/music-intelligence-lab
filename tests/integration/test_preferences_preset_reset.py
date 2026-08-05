@@ -1,4 +1,4 @@
-"""Regression test for preset-driven widget reset (AGENTS.md sección 15/sección 18.5).
+"""Regression test for preset-driven widget reset.
 
 Switching presets must re-initialize the value sliders and weight selectboxes to
 the newly selected preset. Otherwise Streamlit keeps the previous widget state

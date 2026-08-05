@@ -1,10 +1,10 @@
-"""Classifier artifact failure modes (AGENTS.md sección 18.4, sección 25.6).
+"""Classifier artifact failure modes.
 
 A versioned bundle directory can exist on disk (manifests, thresholds and
 encoders are tracked in git) while the joblib payload is absent, e.g. when only
 part of the bundle was deployed or retraining produced a new timestamp. The
 serving layer must fail with the controlled ``DataContractError`` so the app
-renders the sección 18.4 message instead of leaking a raw ``FileNotFoundError``.
+renders the message instead of leaking a raw ``FileNotFoundError``.
 """
 
 from __future__ import annotations

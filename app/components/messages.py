@@ -1,4 +1,4 @@
-"""Small message helpers with consistent wording (AGENTS.md sección 18.4/sección 18.5)."""
+"""Small message helpers with consistent wording."""
 
 from __future__ import annotations
 
@@ -18,11 +18,11 @@ def _format_decimal(value: float | None) -> str:
 
 
 def render_validation_metrics(metrics: dict[str, Any] | None, *, kind: str) -> None:
-    """Render the saved validation quality of a classifier bundle (sección 18.5).
+    """Render the saved validation quality of a classifier bundle.
 
     The numbers come from ``metrics_validation.json`` saved at training time and
     help users calibrate trust: with only 18 acoustic features the models are
-    weak (sección 30). Validation metrics, never test metrics.
+    weak. Validation metrics, never test metrics.
     """
     if not metrics:
         return
@@ -59,7 +59,7 @@ def info_note(text: str) -> None:
 
 
 def error_note(text: str) -> None:
-    """Render an error without exposing a stack trace (sección 18.5)."""
+    """Render an error without exposing a stack trace."""
     st.error(text)
 
 

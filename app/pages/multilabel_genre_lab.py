@@ -1,4 +1,4 @@
-"""Multilabel genre lab page (AGENTS.md sección 16)."""
+"""Multilabel genre lab page."""
 
 from __future__ import annotations
 
@@ -72,7 +72,7 @@ def render() -> None:
 
     if bool(recording_row.get("audio_analysis_incomplete", False)):
         messages.warn_note(
-            "Esta grabación tiene análisis acústico incompleto (sección 4.1). En la "
+            "Esta grabación tiene análisis acústico incompleto. En la "
             "variante A el modelo no vio este patrón durante el entrenamiento."
         )
 
@@ -92,15 +92,15 @@ def render() -> None:
         if prediction["below_threshold"]:
             messages.warn_note(
                 f"Ninguna etiqueta superó el umbral {prediction['threshold']:.2f}; "
-                "se muestra el top-1 con la advertencia correspondiente (sección 16.8)."
+                "se muestra el top-1 con la advertencia correspondiente."
             )
 
         messages.info_note(
-            "Las puntuaciones no están calibradas; no deben leerse como probabilidades (sección 16.10)."
+            "Las puntuaciones no están calibradas; no deben leerse como probabilidades."
         )
         messages.warn_note(
             "Modelo experimental: con solo 18 características acústicas la "
-            "separación entre géneros es limitada (sección 30), por lo que las "
+            "separación entre géneros es limitada, por lo que las "
             "predicciones pueden no coincidir con los géneros reales de la canción."
         )
 

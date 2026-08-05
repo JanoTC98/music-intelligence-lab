@@ -74,8 +74,7 @@ def report_column_extremes(
 ) -> dict[str, dict[str, float]]:
     """Report min/max for columns configured with ``report_extremes: True``.
 
-    Used by the audit for unbounded numeric columns such as ``loudness``
-    (AGENTS.md §11).
+    Used by the audit for unbounded numeric columns such as ``loudness``.
     """
     if ranges is None:
         ranges = get_validation_ranges()

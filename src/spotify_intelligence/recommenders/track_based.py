@@ -35,7 +35,7 @@ def _genre_set(value: object) -> set[str]:
 class RecommendationFilters:
     """User-configurable filters applied after the nearest-neighbor search.
 
-    Defaults match AGENTS.md sección 14.8: all filters are inactive unless enabled.
+    Defaults match the product configuration: all filters are inactive unless enabled.
     """
 
     explicit: str = "all"
@@ -117,11 +117,11 @@ class TrackRecommender:
         """Return a DataFrame with the Top-N recommendations for a seed recording.
 
         When ``include_explanations`` is True, a ``feature_differences`` column
-        lists per-feature differences between the seed and each result (sección 14.9).
+        lists per-feature differences between the seed and each result.
 
         When ``genre_affinity`` is True, the retrieved candidates are re-ranked so
         that recordings sharing at least one genre with the seed come first,
-        keeping similarity order within each group (sección 30 experimental variant).
+        keeping similarity order within each group (experimental variant).
         """
         filters = filters or RecommendationFilters()
         seed_row = self._seed_row_position(recording_group_id)
@@ -153,7 +153,7 @@ class TrackRecommender:
         results: pd.DataFrame,
         seed_row: int,
     ) -> pd.DataFrame:
-        """Re-rank a candidate set so shared-genre recordings come first (sección 30)."""
+        """Re-rank a candidate set so shared-genre recordings come first."""
         seed_genres = _genre_set(self.catalog_index.iloc[seed_row].get("genres"))
         results = results.copy()
         results["_shares_genre"] = results["genres"].map(
@@ -203,7 +203,7 @@ class TrackRecommender:
         if k_values[0] >= full_size:
             k_values = [full_size]
         else:
-            # sección 14.7: último recurso = catálogo completo elegible.
+            # último recurso = catálogo completo elegible.
             k_values = [k for k in k_values if k < full_size] + [full_size]
 
         best_rows: list[int] = []
@@ -257,10 +257,10 @@ class TrackRecommender:
             seed_artists = self.catalog_index.iloc[seed_row]["artists"]
             df = df[df["artists"] != seed_artists]
 
-        # sección 14.6: exclude other recordings of the seed's own work. The exact
+        # exclude other recordings of the seed's own work. The exact
         # recording group is already excluded via ``seed_row``, but a
         # near-duplicate release of the same song (same name and artist set,
-        # different ``recording_group_id``, sección 3.4) would otherwise surface as the
+        # different ``recording_group_id``) would otherwise surface as the
         # top candidate.
         seed_name = str(self.catalog_index.iloc[seed_row].get("track_name", "")).strip().casefold()
         seed_artists = str(self.catalog_index.iloc[seed_row].get("artists", "")).strip().casefold()
